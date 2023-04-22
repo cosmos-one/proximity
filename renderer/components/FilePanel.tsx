@@ -3,6 +3,7 @@ import path from "path";
 import { Button } from "./Button";
 import { FileList } from "./FileList";
 import RingLoader from "react-spinners/RingLoader";
+import { PopDropdown } from "./PopDropdown";
 
 interface CollectionPanelProps {
   active: boolean;
@@ -53,14 +54,33 @@ export const FilePanel: React.FC<CollectionPanelProps> = ({
           <div>FINDER</div>
           {loading ? <RingLoader color="#00ff00" size={20} /> : null}
         </div>
+        {dir ? (
+          <div>
+            <PopDropdown>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1}
+                stroke="currentColor"
+                className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </PopDropdown>
+          </div>
+        ) : null}
       </div>
       <div className="overflow-y-auto h-full">
         {dir ? (
           <div>
-            <FileList filePaths={fileArchive} handleNewTab={handleNewTab}/>
+            <FileList filePaths={fileArchive} handleNewTab={handleNewTab} />
           </div>
         ) : (
-          <div>
+          <div className="w-full justify-center flex">
             <Button
               button="Open Folder"
               submit={() => {
