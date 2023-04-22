@@ -19,7 +19,7 @@ export const Welcome = ({handleOpenDirectory}) => {
 
   return (
     <div className="shadow-inner flex h-full w-full justify-center items-center space-x-5">
-      <div className="grid lg:grid-cols-2">
+      <div className="grid lg:grid-cols-2 w-3/4">
         <div className="space-y-5 p-5">
           <div className="text-lg">Recent</div>
           <div>

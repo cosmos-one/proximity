@@ -13,7 +13,7 @@ export const Toolbar: React.FC<ToolBarProps> = ({
   handlePanelToggle,
 }) => {
   return (
-    <div className="p-5 flex flex-col justify-between">
+    <div className="p-3 flex flex-col justify-between">
       <div className="space-y-5">
         <Tooltip tooltip={"Home"} position={"translate-x-11"}>
           <Link href={"/home"}>

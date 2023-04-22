@@ -42,17 +42,15 @@ export const Editor = ({ file, index, handleChanged, handleSaved, dir }: EditorP
   //     }
   // }
 
-  console.log(inputs)
-
   return (
     <div
-      className="p-20 pt-6 h-full overflow-scroll customScroll overflow-x-hidden px-5 rounded opacity-90 shadow-inset"
+      className="pt-6 pb-20 h-full w-full overflow-scroll customScroll overflow-x-hidden opacity-90"
       tabIndex={0}>
-      <div className="flex justify-center">
-        <div className="space-y-5 lg:w-1/2 min-w-[300px]">
+      <div className="flex justify-center w-full min-w-[300px]">
+        <div className="space-y-5 ">
           <div>
             <div
-              className="prose focus:outline-none leading-snug prose-hr:border-none prose-hr:my-1 text-green prose-headings:text-green prose-p:mb-5"
+              className="prose text-sm focus:outline-none leading-snug prose-hr:border-none prose-hr:my-1 text-green prose-headings:text-green prose-headings:text-2xl prose-p:mb-5 prose-a:text-green"
               contentEditable={true}
               dangerouslySetInnerHTML={{
                 __html: content || "",

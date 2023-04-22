@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import path from "path";
+import fs from "fs";
 import Split from "react-split-it";
 import { ipcRenderer } from "electron";
 
@@ -89,8 +90,19 @@ function Home() {
                 updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
                 setActiveTab(updateActiveTab);
             })
-        } else {
+        } else if (data.includes(".jpg")){
+          const fullPath = path.join(dir, data)
+          fs.readFile(fullPath, (err, res) => {
+            if (err) throw err;
+            update[activeTabGroup].push({id: data, data: res});
+            setTabs(update);
+            const updateActiveTab = activeTab;
+            updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
+            setActiveTab(updateActiveTab);
+          });
           return;
+        } else {
+          return
         }
       }
     }
@@ -129,7 +141,7 @@ function Home() {
       </Head>
       <main className="h-screen max-h-screen flex flex-col overflow-hidden focus:outline-none">
         <Toaster position="top-center" reverseOrder={false} />
-        <WindowBar />
+        <WindowBar dir={dir}/>
         <div className="h-full w-full flex overflow-hidden">
           <Toolbar
             handleActiveTool={handleActiveTool}
@@ -145,7 +157,7 @@ function Home() {
               sizes={[0.1, 0.7]}
               minSize={100}>
               {panel ? (
-                <div className="h-full overflow-y-hidden border-r border-lightgreen">
+                <div className="h-full overflow-y-hidden">
                   <FilePanel
                     active={activeTool === 0}
                     dir={dir}
@@ -156,7 +168,7 @@ function Home() {
                 </div>
               ) : null}
               <Split
-                className="flex w-full h-full"
+                className="flex w-full h-full pr-1"
                 direction="horizontal"
                 gutterSize={10}
                 minSize={100}>

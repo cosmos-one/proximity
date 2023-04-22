@@ -45,16 +45,12 @@ export const FilePanel: React.FC<CollectionPanelProps> = ({
 
   return (
     <div
-      className={`p-5 ${
+      className={`py-3 opacity-50 hover:opacity-90 duration-150 ${
         active ? "flex flex-col h-full overflow-hidden space-y-4" : "hidden"
       }`}>
       <div className="group flex justify-between items-center w-full overflow-hidden">
         <div className="flex items-center space-x-4">
-          {dir ? (
-            <div className="font-bold">{path.basename(dir)}</div>
-          ) : (
-            <div>No Folder Selected</div>
-          )}
+          <div>FINDER</div>
           {loading ? <RingLoader color="#00ff00" size={20} /> : null}
         </div>
       </div>

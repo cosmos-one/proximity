@@ -1,7 +1,7 @@
 export const FileName = ({text}) => {
     return(
         <>
-            {text}
+            {text.replace(/\.[^.]*$/, "")}
         </>
     )
 }

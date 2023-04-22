@@ -72,8 +72,8 @@ ipcMain.handle('markdown', async (event, message) => {
   }
   //Get data for a single recipe
   else if (message.req === "GET") {
-    let recipe = await readMarkdown(message.path)
-    return recipe
+    let md = await readMarkdown(message.path)
+    return md
   }
   else if (message.req === "POST") {
     //Save recipe
