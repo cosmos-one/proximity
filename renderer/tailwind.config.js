@@ -11,8 +11,26 @@ module.exports = {
       white: colors.white,
       gray: colors.gray,
       blue: colors.blue,
+      black: colors.black,
     },
-    extend: {},
+    extend: {
+      colors: {
+        green: "#00ff00",
+        blue: "#0000ff",
+        red: "#ff0000",
+        lightgreen: "#00ff0055",
+        hlgreen: "#00ff0044"
+      },
+      typography: ({ theme }) => ({
+        green: {
+          css: {
+            '--tw-prose-headings': theme('colors.green'),
+          }
+        }
+      })
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };

@@ -2,14 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-gray-900 text-white;
-  }
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  letter-spacing: -0.02rem;
+  background: #080808;
+  color: #00ff00;
+  font-size: 0.9rem;
 }
 
-@layer components {
-  .btn-blue {
-    @apply text-white font-bold px-4 py-2 rounded bg-blue-600 hover:bg-blue-500;
-  }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input {
+  background: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+.drag {
+  -webkit-app-region: drag
+}
+
+
+.customScroll::-webkit-scrollbar-track
+{
+	background-color: #00000000;
+}
+
+.customScroll::-webkit-scrollbar
+{
+	width: 3px;
+}
+
+.customScroll::-webkit-scrollbar-thumb
+{
+  background: #00ff00;
+}
+
+/* react-split-it classes */
+.split-vertical {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gutter {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.gutter:hover {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.gutter-horizontal {
+  cursor: col-resize;
+}
+.gutter-vertical {
+  cursor: row-resize;
+}
+
+.pane {
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.pane-dragging {
+  overflow: hidden;
 }

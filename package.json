@@ -1,26 +1,34 @@
 {
   "private": true,
-  "name": "my-nextron-app",
-  "description": "My application description",
-  "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "name": "proximity",
+  "description": "Desktop app for Proximity assets and collections",
+  "version": "0.1.0",
+  "author": "Kelvin Chan <kchan@cosmosone.xyz>",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
+    "build:all": "nextron build --all",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.9",
     "@headlessui/tailwindcss": "^0.1.2",
+    "allotment": "^1.18.1",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
+    "gray-matter": "^4.0.3",
+    "next-themes": "^0.2.1",
     "node-ipc": "^11.1.0",
+    "react-hot-toast": "^2.4.0",
+    "react-spinners": "^0.13.8",
     "react-split-it": "^2.0.0",
     "remark": "^14.0.2",
-    "remark-html": "^15.0.1"
+    "remark-html": "^15.0.1",
+    "turndown": "^7.1.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
     "autoprefixer": "^10.4.7",
