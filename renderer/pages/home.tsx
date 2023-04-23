@@ -84,6 +84,12 @@ function Home() {
     setActiveTabGroup(index);
   };
 
+  function isImageFile(fileName: string): boolean {
+    const imageExtensions = /\.(jpe?g|png|gif|bmp)$/i;
+    return imageExtensions.test(fileName);
+  }
+  
+
   const handleNewTab = (fileName) => {
     if (tabs[activeTabGroup]) {
       if (
@@ -104,7 +110,7 @@ function Home() {
                 update[activeTabGroup].length - 1;
               setActiveTab(updateActiveTab);
             });
-        } else if (fileName.includes(".jpg")) {
+        } else if (isImageFile(fileName)) {
           const fullPath = path.join(dir, fileName);
           fs.readFile(fullPath, (err, res) => {
             if (err) throw err;
@@ -192,7 +198,7 @@ function Home() {
               sizes={[0.1, 0.7]}
               minSize={100}>
               {panel ? (
-                <div className="h-full overflow-y-hidden">
+                <div className="h-full overflow-y-hidden opacity-90">
                   <FilePanel
                     refresh={() => {
                       handleRefresh();

@@ -59,6 +59,7 @@ export const CollectionViewport = ({
                 {item?.map((asset, index) => {
                   return (
                     <td
+                    key={index}
                       tabIndex={1}
                       className={`p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
                       style={{

@@ -3,6 +3,7 @@ import path from "path";
 import unzipper from "unzipper";
 
 export default function readAsset(slug) {
+  const parsed = path.parse(slug);
   return new Promise((resolve, reject) => {
     const readStream = fs.createReadStream(slug);
     const unzipStream = readStream.pipe(unzipper.Parse());
@@ -11,10 +12,12 @@ export default function readAsset(slug) {
       file: path.basename(slug),
       meta: null,
       heroImage: null,
-    }
+      fileData: null,
+    };
 
     let metaFound = false;
     let heroImageFound = false;
+    let fileFound = false;
 
     unzipStream.on("entry", async (entry) => {
       const fileName = entry.path;
@@ -34,11 +37,19 @@ export default function readAsset(slug) {
         const data = Buffer.concat(chunks);
         res.heroImage = data;
         heroImageFound = true;
+      } else if (fileName.includes(parsed.name)) {
+        const chunks = [];
+        for await (const chunk of entry) {
+          chunks.push(chunk);
+        }
+        const data = Buffer.concat(chunks);
+        res.fileData = data;
+        fileFound = true;
       } else {
         entry.autodrain();
       }
 
-      if (metaFound && heroImageFound) {
+      if (metaFound && heroImageFound && fileFound) {
         resolve(res);
       }
     });

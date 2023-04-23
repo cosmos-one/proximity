@@ -47,7 +47,7 @@ export const FilePanel: React.FC<FilePanelProps> = ({
 
   return (
     <div
-      className={`py-3 opacity-50 hover:opacity-90 duration-150 ${
+      className={`py-3 duration-150 ${
         active ? "flex flex-col h-full overflow-hidden space-y-4" : "hidden"
       }`}>
       <div className="group flex justify-between items-center w-full overflow-hidden">

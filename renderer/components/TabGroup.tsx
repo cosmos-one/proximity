@@ -4,7 +4,7 @@ import Split from "react-split-it";
 import { Editor } from "./Editor";
 import { Tooltip } from "./Tooltip";
 import { Welcome } from "./Welcome";
-import { ImagePreview } from "./ImagePreview";
+import { Image } from "./Image";
 import { Collection } from "./Collection";
 import { Asset } from "./Asset";
 
@@ -69,8 +69,8 @@ export const TabGroup = ({
                             {({ selected }) => (
                               <div
                                 className={`group flex items-center space-x-2 ${
-                                  selected ? " opacity-100" : ""
-                                } focus:border-none focus:outline-none p-2 rounded-sm opacity-50 hover:opacity-100 duration-150`}
+                                  selected ? " opacity-100" : "opacity-30"
+                                } focus:border-none focus:outline-none p-2 rounded-sm hover:opacity-100 duration-150`}
                                 onClick={(e) => {
                                   handleActiveTab(i, index);
                                 }}>
@@ -205,7 +205,7 @@ export const TabGroup = ({
                               dir={dir}
                             />
                           ) : isImage(tab.id) ? (
-                            <ImagePreview index={index} file={tab} dir={dir} />
+                            <Image file={tab}/>
                           ) : tab.id.includes(".pcol") ? (
                             <Collection file={tab} dir={dir} />
                           ) : tab.id.includes(".pas") ? (

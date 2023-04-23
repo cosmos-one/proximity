@@ -15,19 +15,10 @@ export const Toolbar: React.FC<ToolBarProps> = ({
   return (
     <div className="p-3 flex flex-col justify-between">
       <div className="space-y-3">
-        {/* <Tooltip tooltip={"Network"} position={"translate-x-11"}>
-                    <Link href={"/network"}>
-                        <div className={`hover:opacity-100 hover:cursor-pointer opacity-50`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" className="w-8 h-8">
-                            <path stroke="rgba(0,255,0,1)" strokeWidth="0.75" d="M16 16c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zM6 12c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4zM14.5 2C17.538 2 20 4.462 20 7.5S17.538 13 14.5 13 9 10.538 9 7.5 11.462 2 14.5 2zM14.5 4C12.567 4 11 5.567 11 7.5s1.567 3.5 3.5 3.5S18 9.433 18 7.5 16.433 4 14.5 4z"/>
-                        </svg>
-                        </div>
-                    </Link>
-                </Tooltip> */}
         <Tooltip tooltip={"Finder"} position={"translate-x-11"}>
           <div
             className={`hover:opacity-100 hover:cursor-pointer ${
-              activeTool === 0 ? "opacity-50" : "opacity-30"
+              activeTool === 0 ? "opacity-70" : "opacity-30"
             }`}
             onClick={(e) => {
               handleActiveTool(0);
@@ -53,7 +44,7 @@ export const Toolbar: React.FC<ToolBarProps> = ({
         <Tooltip tooltip={"Collections"} position={"translate-x-11"}>
           <div
             className={`hover:opacity-100 hover:cursor-pointer ${
-              activeTool === 1 ? "opacity-50" : "opacity-30"
+              activeTool === 1 ? "opacity-70" : "opacity-30"
             }`}
             onClick={(e) => {
               handleActiveTool(1);
@@ -79,7 +70,7 @@ export const Toolbar: React.FC<ToolBarProps> = ({
         <Tooltip tooltip={"Assets"} position={"translate-x-11"}>
           <div
             className={`hover:opacity-100 hover:cursor-pointer ${
-              activeTool === 2 ? "opacity-50" : "opacity-30"
+              activeTool === 2 ? "opacity-70" : "opacity-30"
             }`}
             onClick={(e) => {
               handleActiveTool(2);

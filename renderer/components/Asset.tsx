@@ -4,17 +4,20 @@ import { Tooltip } from "./Tooltip";
 import { HorizontalLine } from "./HorizontalLine";
 import { AssetUtilities } from "./AssetUtilities";
 import { Time } from "./Time";
+import { AssetViewport } from "./AssetViewport";
 
 export const Asset = ({ file, dir }) => {
   const [assetUtilities, setAssetUtilities] = useState(true);
   const [asset, setAsset] = useState({});
   const [lastModified, setLastModified] = useState("");
   const [imageData, setImageData] = useState<Buffer>();
+  const [fileData, setFileData] = useState<Buffer>();
 
   useEffect(() => {
     setAsset(file.meta);
     setLastModified(`${file.meta.body.lastModified}`);
-    setImageData(file.heroImage)
+    setImageData(file.heroImage);
+    setFileData(file.fileData);
   }, [file]);
 
   return (
@@ -30,7 +33,7 @@ export const Asset = ({ file, dir }) => {
             assetUtilities ? "rounded-tl-md rounded-bl-md" : "rounded-t-md"
           }`}>
           <div className="flex items-center justify-between p-2">
-          <div className="text-xs italic">
+            <div className="text-xs italic">
               {lastModified ? <Time dateString={lastModified} /> : null}
             </div>
             <div>
@@ -57,8 +60,11 @@ export const Asset = ({ file, dir }) => {
             </div>
           </div>
           <HorizontalLine />
+          <AssetViewport asset={asset} fileData={fileData} />
         </div>
-        {assetUtilities ? <AssetUtilities asset={asset} imageData={imageData}/> : null}
+        {assetUtilities ? (
+          <AssetUtilities asset={asset} imageData={imageData} />
+        ) : null}
       </Split>
     </div>
   );
