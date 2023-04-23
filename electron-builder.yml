@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.example.proximity
+productName: Proximity Native
+copyright: Copyright © 2023 Cosmosone Ltd.
 directories:
   output: dist
   buildResources: resources

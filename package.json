@@ -1,13 +1,13 @@
 {
   "private": true,
-  "name": "proximity",
+  "name": "proximity-native",
   "description": "Desktop app for Proximity assets and collections",
   "version": "0.1.0",
   "author": "Kelvin Chan <kchan@cosmosone.xyz>",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
-    "build": "nextron build",
+    "build": "nextron build --mac --x64",
     "build:all": "nextron build --all",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -19,9 +19,7 @@
     "@radix-ui/react-select": "^1.2.1",
     "@radix-ui/react-slider": "^1.1.1",
     "@use-gesture/react": "^10.2.26",
-    "allotment": "^1.18.1",
     "archiver": "^5.3.1",
-    "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
@@ -29,7 +27,6 @@
     "gray-matter": "^4.0.3",
     "next-themes": "^0.2.1",
     "node-ipc": "^11.1.0",
-    "pdfjs-dist": "^3.5.141",
     "react-hot-toast": "^2.4.0",
     "react-spinners": "^0.13.8",
     "react-split-it": "^2.0.0",

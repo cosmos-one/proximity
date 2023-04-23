@@ -80,7 +80,7 @@ export const AssetUtilities = ({ asset, imageData }) => {
         </div>
         <div></div>
         <HorizontalLine />
-        <div>{type}</div>
+        <div>Type:<span className="italic"> {type}</span></div>
       </div>
     </div>
   );
