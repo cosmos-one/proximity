@@ -39,16 +39,46 @@ export const AssetUtilities = ({ asset, imageData }) => {
       <div className="p-2 space-y-2 h-full w-full overflow-y-auto customScroll">
         {imageData && (
           <img
-          className="border border-lightgreen max-h-[50vh] w-full"
+            className="border border-lightgreen max-h-[50vh] w-full"
             src={`data:image/png;base64,${Buffer.from(imageData).toString(
               "base64"
             )}`}
             alt={name}
           />
         )}
-        <div className="font-semibold">{name}</div>
-        <div className="italic">{source}</div>
-        <div>{notes}</div>
+        <div className="font-semibold">
+          <input
+            className="border border-lightgreen rounded-md w-full p-1"
+            type="text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            placeholder="Name"
+          />
+        </div>
+        <div className="italic">
+          <input
+            type="text"
+            className="border border-lightgreen rounded-md w-full p-1"
+            value={source}
+            placeholder="Source (Optional)"
+            onChange={(e) => {
+              setSource(e.target.value);
+            }}
+          />
+        </div>
+        <div>
+          <textarea
+            className="border border-lightgreen rounded-md w-full p-1 bg-black resize-none min-h-[200px] focus:outline-none"
+            value={notes}
+            placeholder="Notes (Optional)"
+            onChange={(e) => {
+              setNotes(e.target.value);
+            }}
+          />
+        </div>
+        <div></div>
         <HorizontalLine />
         <div>{type}</div>
       </div>
