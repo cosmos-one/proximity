@@ -3,7 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 export const PopDropdownItem = ({children, onClick = undefined}) => {
   return (
-    <DropdownMenu.Item className='hover:border-none hover:outline-none hover:cursor-pointer hover:bg-hlgreen p-1 rounded-md' onClick={onClick}>
+    <DropdownMenu.Item className='hover:border-none hover:outline-none hover:cursor-pointer hover:bg-hlgreen p-1 rounded-md flex items-center space-x-2' onClick={onClick}>
       {children}
     </DropdownMenu.Item>
   );

@@ -1,11 +1,9 @@
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  PopDropdownItem,
-  PopDropdownContent,
-} from "./PopDropdown";
+import { PopDropdownItem, PopDropdownContent } from "./PopDropdown";
+import { HiOutlineFolderPlus } from "react-icons/hi2";
 
-export const NewFileDropdown = ({collectionCreateInputToggle}) => {
+export const NewFileDropdown = ({ collectionCreateInputToggle }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -25,10 +23,16 @@ export const NewFileDropdown = ({collectionCreateInputToggle}) => {
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <PopDropdownContent>
-          <PopDropdownItem>New Folder</PopDropdownItem>
-          <PopDropdownItem>New File</PopDropdownItem>
-          <PopDropdownItem onClick={() => {collectionCreateInputToggle()}}>New Collection</PopDropdownItem>
-          <DropdownMenu.Arrow className="DropdownMenuArrow"/>
+          <PopDropdownItem>
+            <div>New Folder</div>
+          </PopDropdownItem>
+          <PopDropdownItem
+            onClick={() => {
+              collectionCreateInputToggle();
+            }}>
+            New Collection
+          </PopDropdownItem>
+          <DropdownMenu.Arrow className="DropdownMenuArrow" />
         </PopDropdownContent>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>

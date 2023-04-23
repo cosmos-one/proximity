@@ -1,5 +1,6 @@
 import path from "path";
 import { Dropdown } from "./Dropdown";
+import { FileIcon } from "./FileIcon";
 import { FileName } from "./FileName";
 import { CollectionCreateInput } from "./CollectionCreateInput";
 
@@ -67,11 +68,16 @@ export const FileList = ({
         return (
           <li
             key={fullPath}
-            className="truncate rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen p-1"
+            className="rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen p-1 w-full flex items-center space-x-2"
             onClick={() => {
               handleNewTab(fullPath);
             }}>
-            <FileName text={path.basename(fullPath)} />
+            <div>
+              <FileIcon fileType={path.extname(fullPath)} />
+            </div>
+            <div className="truncate">
+              <FileName text={path.basename(fullPath)} />
+            </div>
           </li>
         );
       }),
