@@ -9,11 +9,14 @@ export const Asset = ({ file, dir }) => {
   const [assetUtilities, setAssetUtilities] = useState(true);
   const [asset, setAsset] = useState({});
   const [lastModified, setLastModified] = useState("");
+  const [imageData, setImageData] = useState<Buffer>();
 
   useEffect(() => {
     setAsset(file.meta);
     setLastModified(`${file.meta.body.lastModified}`);
-  });
+    setImageData(file.heroImage)
+  }, [file]);
+
   return (
     <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
       <Split
@@ -55,7 +58,7 @@ export const Asset = ({ file, dir }) => {
           </div>
           <HorizontalLine />
         </div>
-        {assetUtilities ? <AssetUtilities asset={asset} /> : null}
+        {assetUtilities ? <AssetUtilities asset={asset} imageData={imageData}/> : null}
       </Split>
     </div>
   );

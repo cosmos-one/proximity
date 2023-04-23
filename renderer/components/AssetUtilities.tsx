@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { HorizontalLine } from "./HorizontalLine";
 
-export const AssetUtilities = ({ asset }) => {
+export const AssetUtilities = ({ asset, imageData }) => {
   const [name, setName] = useState("");
   const [source, setSource] = useState("");
   const [notes, setNotes] = useState("");
+  const [type, setType] = useState("");
 
   useEffect(() => {
-    console.log(asset)
     setName(asset?.body?.name);
     setSource(asset?.body?.source);
     setNotes(asset?.body?.notes);
+    setType(asset?.body?.type);
   }, [asset]);
 
   return (
@@ -36,9 +37,20 @@ export const AssetUtilities = ({ asset }) => {
       </div>
       <HorizontalLine />
       <div className="p-2 space-y-2 h-full w-full overflow-y-auto customScroll">
+        {imageData && (
+          <img
+          className="border border-lightgreen max-h-[50vh] w-full"
+            src={`data:image/png;base64,${Buffer.from(imageData).toString(
+              "base64"
+            )}`}
+            alt={name}
+          />
+        )}
         <div className="font-semibold">{name}</div>
         <div className="italic">{source}</div>
-        <div className="">{notes}</div>
+        <div>{notes}</div>
+        <HorizontalLine />
+        <div>{type}</div>
       </div>
     </div>
   );

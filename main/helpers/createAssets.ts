@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import archiver from "archiver";
+import sharp from "sharp";
 
 type AssetCreateType = {
   filePath: string;
@@ -22,10 +23,24 @@ export default async function createAssets(
       const output = fs.createWriteStream(
         path.join(directory, asset.name + ".pas")
       );
-      // Add the file from the file path
-      archive.file(asset.filePath, {
-        name: asset.name + path.extname(asset.filePath),
-      });
+      
+      // If filePath is an image, resize it
+      if (asset.type.includes("image")) {
+        const imageBuffer = await sharp(asset.filePath)
+          .resize({ width: 1800 })
+          .png()
+          .toBuffer();
+        archive.append(imageBuffer, { name: "heroImage.png" });
+        // Add the file from the file path
+        archive.file(asset.filePath, {
+          name: asset.name + path.extname(asset.filePath),
+        });
+      } else {
+        // Add the file from the file path
+        archive.file(asset.filePath, {
+          name: asset.name + path.extname(asset.filePath),
+        });
+      }
 
       // Add the json metadata
       const body = {
