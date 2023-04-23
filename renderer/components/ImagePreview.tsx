@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState, createElement, Fragment } from "react";
-import { micromark } from "micromark";
-import { ipcRenderer } from "electron";
 
 interface ImagePreviewProps {
   file: { title: string; data: Buffer };

@@ -3,7 +3,7 @@ import path from "path";
 import { Button } from "./Button";
 import { FileList } from "./FileList";
 import RingLoader from "react-spinners/RingLoader";
-import { PopDropdown } from "./PopDropdown";
+import { NewFileDropdown } from "./NewFileDropdown";
 
 interface CollectionPanelProps {
   active: boolean;
@@ -11,6 +11,7 @@ interface CollectionPanelProps {
   files: string[];
   handleOpenNewDirectory: () => void;
   handleNewTab: (file: string) => void;
+  refresh: () => void;
 }
 
 export const FilePanel: React.FC<CollectionPanelProps> = ({
@@ -19,11 +20,14 @@ export const FilePanel: React.FC<CollectionPanelProps> = ({
   files,
   handleOpenNewDirectory,
   handleNewTab,
+  refresh,
 }) => {
+  //Files
   const [fileArchive, setFileArchive] = useState([]);
-
   //Loading
   const [loading, setLoading] = useState(false);
+  //Create
+  const [collectionCreateInput, setCollectionCreateInput] = useState(false);
 
   useEffect(() => {
     const filtered = files
@@ -56,28 +60,14 @@ export const FilePanel: React.FC<CollectionPanelProps> = ({
         </div>
         {dir ? (
           <div>
-            <PopDropdown>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1}
-                stroke="currentColor"
-                className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-            </PopDropdown>
+            <NewFileDropdown collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
           </div>
         ) : null}
       </div>
       <div className="overflow-y-auto h-full">
         {dir ? (
           <div>
-            <FileList filePaths={fileArchive} handleNewTab={handleNewTab} />
+            <FileList refresh={refresh} filePaths={fileArchive} dir={dir} handleNewTab={handleNewTab} collectionCreateInput={collectionCreateInput} collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
           </div>
         ) : (
           <div className="w-full justify-center flex">

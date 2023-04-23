@@ -9,7 +9,6 @@ import { ipcRenderer } from "electron";
 import { Toaster } from "react-hot-toast";
 import { Toolbar } from "@/components/Toolbar";
 import { FilePanel } from "@/components/FilePanel";
-import { Welcome } from "@/components/Welcome";
 import { TabGroup } from "@/components/TabGroup";
 import { Footer } from "@/components/Footer";
 import { WindowBar } from "@/components/WindowBar";
@@ -63,6 +62,16 @@ function Home() {
     });
   };
 
+  const handleRefresh = async () => {
+    console.log("working")
+    ipcRenderer.invoke("open-directory", dir).then((result) => {
+      let processedFiles = result.files.map((file) => {
+        return file;
+      });
+      setFiles(processedFiles);
+    });
+  }
+
   //Tab Functions
   const handleNewTabGroup = () => {
     const update = [...tabs];
@@ -74,14 +83,14 @@ function Home() {
     setActiveTabGroup(index);
   };
 
-  const handleNewTab = (data) => {
+  const handleNewTab = (fileName) => {
     if (tabs[activeTabGroup]) {
-      if (tabs[activeTabGroup].filter((tab) => tab.id === data).length > 0) {
+      if (tabs[activeTabGroup].filter((tab) => tab.id === fileName).length > 0) {
         return;
       } else {
         const update = [...tabs];
-        if (data.includes(".md")) {
-          const fullPath = path.join(dir, data)
+        if (fileName.includes(".md")) {
+          const fullPath = path.join(dir, fileName)
             ipcRenderer.invoke("markdown", { req: "GET", path: fullPath })
             .then((res) => {
                 update[activeTabGroup].push(res);
@@ -90,19 +99,27 @@ function Home() {
                 updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
                 setActiveTab(updateActiveTab);
             })
-        } else if (data.includes(".jpg")){
-          const fullPath = path.join(dir, data)
+        } else if (fileName.includes(".jpg")){
+          const fullPath = path.join(dir, fileName)
           fs.readFile(fullPath, (err, res) => {
             if (err) throw err;
-            update[activeTabGroup].push({id: data, data: res});
+            update[activeTabGroup].push({id: fileName, data: res});
             setTabs(update);
             const updateActiveTab = activeTab;
             updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
             setActiveTab(updateActiveTab);
           });
           return;
-        } else {
-          return
+        } else if (fileName.includes(".pcol")){
+          const fullPath = path.join(dir, fileName)
+          ipcRenderer.invoke("collection", { req: "GET", path: fullPath })
+          .then((res) => {
+            update[activeTabGroup].push(res);
+            setTabs(update);
+            const updateActiveTab = activeTab;
+            updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
+            setActiveTab(updateActiveTab);
+          })
         }
       }
     }
@@ -159,6 +176,7 @@ function Home() {
               {panel ? (
                 <div className="h-full overflow-y-hidden">
                   <FilePanel
+                    refresh={() => {handleRefresh()}}
                     active={activeTool === 0}
                     dir={dir}
                     files={files}
@@ -168,7 +186,7 @@ function Home() {
                 </div>
               ) : null}
               <Split
-                className="flex w-full h-full pr-1"
+                className="flex w-full h-full overflow-hidden pr-1"
                 direction="horizontal"
                 gutterSize={10}
                 minSize={100}>

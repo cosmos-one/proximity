@@ -5,6 +5,7 @@ import { Editor } from "./Editor";
 import { Tooltip } from "./Tooltip";
 import { Welcome } from "./Welcome";
 import { ImagePreview } from "./ImagePreview";
+import { Collection } from "./Collection";
 
 export const TabGroup = ({
   dir,
@@ -53,13 +54,13 @@ export const TabGroup = ({
         <>
           {tabs?.length > 0 ? (
             <div
-              className="w-full h-full"
+              className="w-full h-full overflow-hidden flex flex-col"
               onClick={(e) => {
                 handleActiveTabGroup(index);
               }}>
               <Tab.Group selectedIndex={activeTab}>
                 <Tab.List>
-                  <div className="flex items-center justify-between space-x-5">
+                  <div className="flex items-center justify-between space-x-5 h-full">
                     <div className="flex whitespace-nowrap overflow-scroll scrollBarHide">
                       {tabs?.map((tab, i) => {
                         return (
@@ -171,13 +172,12 @@ export const TabGroup = ({
                     ) : null}
                   </div>
                 </Tab.List>
-                <Tab.Panels>
+                <Tab.Panels className="h-full w-full overflow-hidden">
                   {tabs?.map((tab, index) => {
-                    console.log(tab);
                     return (
-                      <Tab.Panel key={index}>
+                      <Tab.Panel key={index} className="h-full w-full overflow-hidden">
                         <Split
-                          className="h-[90vh] max-h-[90vh] flex flex-col"
+                          className="h-full w-full flex flex-col"
                           direction={"vertical"}
                           minSize={150}
                           gutterSize={10}>
@@ -191,9 +191,9 @@ export const TabGroup = ({
                             />
                           ) : isImage(tab.id) ? (
                             <ImagePreview index={index} file={tab} dir={dir} />
-                          )
-                        :
-                        null}
+                          ) : tab.id.includes(".pcol") ? (
+                            <Collection file={tab} dir={dir} />
+                          ) : null}
                         </Split>
                       </Tab.Panel>
                     );
