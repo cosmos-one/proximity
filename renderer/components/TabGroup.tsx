@@ -5,6 +5,7 @@ import { Editor } from "./Editor";
 import { Tooltip } from "./Tooltip";
 import { Welcome } from "./Welcome";
 import { Image } from "./Image";
+import { PDF } from "./PDF";
 import { Collection } from "./Collection";
 import { Asset } from "./Asset";
 
@@ -65,7 +66,7 @@ export const TabGroup = ({
                     <div className="flex whitespace-nowrap overflow-scroll scrollBarHide">
                       {tabs?.map((tab, i) => {
                         return (
-                          <Tab key={i}>
+                          <Tab key={i} className={"focus:outline-none focus:border-none"}>
                             {({ selected }) => (
                               <div
                                 className={`group flex items-center space-x-2 ${
@@ -206,7 +207,11 @@ export const TabGroup = ({
                             />
                           ) : isImage(tab.id) ? (
                             <Image file={tab}/>
-                          ) : tab.id.includes(".pcol") ? (
+                          ) : tab.id.includes(".pdf") ? (
+                            <PDF file={tab}/>
+                          ) :
+                          
+                          tab.id.includes(".pcol") ? (
                             <Collection file={tab} dir={dir} />
                           ) : tab.id.includes(".pas") ? (
                             <Asset file={tab} dir={dir} />

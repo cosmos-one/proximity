@@ -89,7 +89,6 @@ function Home() {
     return imageExtensions.test(fileName);
   }
   
-
   const handleNewTab = (fileName) => {
     if (tabs[activeTabGroup]) {
       if (
@@ -144,6 +143,17 @@ function Home() {
               update[activeTabGroup].length - 1;
             setActiveTab(updateActiveTab);
           })
+        } else if (fileName.includes(".pdf")) {
+          const fullPath = path.join(dir, fileName);
+          fs.readFile(fullPath, (err, res) => {
+            if (err) throw err;
+            update[activeTabGroup].push({ id: fileName, data: res });
+            setTabs(update);
+            const updateActiveTab = activeTab;
+            updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
+            setActiveTab(updateActiveTab);
+          });
+          return;
         }
       }
     }
