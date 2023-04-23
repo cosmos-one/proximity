@@ -11,7 +11,7 @@ export const PopDropdownItem = ({children, onClick = undefined}) => {
 
 export const PopDropdownContent = ({children}) => {
   return (
-    <DropdownMenu.Content className="bg-black p-2 rounded-md" sideOffset={5}>
+    <DropdownMenu.Content className="bg-black p-2 rounded-md border border-lightgreen" sideOffset={5}>
       {children}
     </DropdownMenu.Content>
   );

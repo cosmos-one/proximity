@@ -48,7 +48,8 @@ input:focus {
 
 .customScroll::-webkit-scrollbar-thumb
 {
-  background: #00ff00;
+  background: #00ff0044;
+  opacity: 0.5;
 }
 
 /* react-split-it classes */

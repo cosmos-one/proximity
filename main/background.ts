@@ -7,6 +7,8 @@ import {
   writeRecentDirectories,
   createMarkdown,
   readMarkdown,
+  createAssets,
+  readAsset,
   createCollection,
   readCollection,
 } from "./helpers";
@@ -106,5 +108,18 @@ ipcMain.handle("collection", async (event, message) => {
   } else if (message.req === "POST") {
     let col = await createCollection(message.path, message.name);
     return col;
+  }
+});
+
+//Assets
+ipcMain.handle("asset", async (event, message) => {
+  if (!message.req) {
+    return;
+  } else if (message.req === "GET") {
+    let asset = await readAsset(message.path);
+    return asset;
+  } else if (message.req === "POST") {
+    let asset = await createAssets(message.path, message.data);
+    return asset;
   }
 });

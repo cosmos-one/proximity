@@ -20,6 +20,8 @@
     "@radix-ui/react-slider": "^1.1.1",
     "@use-gesture/react": "^10.2.26",
     "allotment": "^1.18.1",
+    "archiver": "^5.3.1",
+    "crypto-js": "^4.1.1",
     "date-fns": "^2.29.3",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
@@ -32,7 +34,8 @@
     "react-split-it": "^2.0.0",
     "remark": "^14.0.2",
     "remark-html": "^15.0.1",
-    "turndown": "^7.1.2"
+    "turndown": "^7.1.2",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

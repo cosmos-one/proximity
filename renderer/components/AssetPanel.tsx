@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
 import path from "path";
-import { Button } from "./Button";
 import { FileList } from "./FileList";
 import RingLoader from "react-spinners/RingLoader";
-import { NewFileDropdown } from "./NewFileDropdown";
+import { AssetCreateModal } from "./AssetCreateModal";
 
-interface FilePanelProps {
+interface AssetPanelProps {
   active: boolean;
   dir: string;
   files: string[];
-  handleOpenNewDirectory: () => void;
   handleNewTab: (file: string) => void;
   refresh: () => void;
 }
 
-export const FilePanel: React.FC<FilePanelProps> = ({
+export const AssetPanel: React.FC<AssetPanelProps> = ({
   active,
   dir,
   files,
-  handleOpenNewDirectory,
   handleNewTab,
   refresh,
 }) => {
@@ -27,14 +24,12 @@ export const FilePanel: React.FC<FilePanelProps> = ({
   //Loading
   const [loading, setLoading] = useState(false);
   //Create
-  const [collectionCreateInput, setCollectionCreateInput] = useState(false);
+  const [createAsset, setCreateAsset] = useState(false);
 
   useEffect(() => {
     const filtered = files
       .map((filePath) => {
-        if (
-          !filePath.includes("/.")
-        ) {
+        if (filePath.includes(".pas")) {
           return path.relative(dir, filePath);
         }
         return null;
@@ -52,28 +47,41 @@ export const FilePanel: React.FC<FilePanelProps> = ({
       }`}>
       <div className="group flex justify-between items-center w-full overflow-hidden">
         <div className="flex items-center space-x-4">
-          <div>FINDER</div>
+          <div>ASSETS</div>
           {loading ? <RingLoader color="#00ff00" size={20} /> : null}
         </div>
         {dir ? (
           <div>
-            <NewFileDropdown collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1}
+              stroke="currentColor"
+              className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md" onClick={() => {setCreateAsset(!createAsset)}}>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+            <AssetCreateModal modal={createAsset} toggle={() => {setCreateAsset(!createAsset)}} dir={dir} refresh={refresh}/>
           </div>
         ) : null}
       </div>
       <div className="overflow-y-auto h-full">
         {dir ? (
           <div>
-            <FileList refresh={refresh} filePaths={fileArchive} dir={dir} handleNewTab={handleNewTab} collectionCreateInput={collectionCreateInput} collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
+            <FileList
+              refresh={refresh}
+              filePaths={fileArchive}
+              dir={dir}
+              handleNewTab={handleNewTab}
+            />
           </div>
         ) : (
           <div className="w-full justify-center flex">
-            <Button
-              button="Open Folder"
-              submit={() => {
-                handleOpenNewDirectory();
-              }}
-            />
+            No directory selected.
           </div>
         )}
       </div>

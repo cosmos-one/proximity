@@ -8,8 +8,8 @@ export const FileList = ({
   filePaths,
   dir,
   handleNewTab,
-  collectionCreateInput,
-  collectionCreateInputToggle,
+  collectionCreateInput = undefined,
+  collectionCreateInputToggle = undefined,
 }) => {
   const directoryTree = filePaths.reduce((tree, filePath) => {
     const parts = filePath.split(path.sep);
@@ -31,7 +31,6 @@ export const FileList = ({
     const files = [];
 
     Object.keys(tree).forEach((key) => {
-      const fullPath = path.join(currentPath, key);
       const isDirectory = Object.keys(tree[key]).length > 0;
 
       if (isDirectory) {

@@ -44,9 +44,9 @@ export const Editor = ({ file, index, handleChanged, handleSaved, dir }: EditorP
 
   return (
     <div
-      className="p-20 h-full w-full overflow-scroll customScroll overflow-x-hidden opacity-90 border border-lightgreen rounded-md"
+      className="p-2 h-full w-full overflow-hidden opacity-90 border border-lightgreen rounded-md"
       tabIndex={0}>
-      <div className="flex justify-center w-full min-w-[300px]">
+      <div className="flex justify-center w-full h-full overflow-y-auto customScroll min-w-[300px] p-5">
         <div className="space-y-5">
           <div>
             <div

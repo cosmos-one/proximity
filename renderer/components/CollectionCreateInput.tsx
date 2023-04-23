@@ -51,7 +51,7 @@ export const CollectionCreateInput: React.FC<CollectionCreateInputProps> = ({
           createCollection,
           {
             loading: `Creating ${e.currentTarget.value}...`,
-            success: `Success, redirecting you to ${e.currentTarget.value}...`,
+            success: `Success!`,
             error: "Something went wrong. Please try again.",
           },
           {

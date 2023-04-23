@@ -6,6 +6,7 @@ import { Tooltip } from "./Tooltip";
 import { Welcome } from "./Welcome";
 import { ImagePreview } from "./ImagePreview";
 import { Collection } from "./Collection";
+import { Asset } from "./Asset";
 
 export const TabGroup = ({
   dir,
@@ -67,13 +68,25 @@ export const TabGroup = ({
                           <Tab key={i}>
                             {({ selected }) => (
                               <div
-                                className={`group flex items-center ${
+                                className={`group flex items-center space-x-2 ${
                                   selected ? " opacity-100" : ""
                                 } focus:border-none focus:outline-none p-2 rounded-sm opacity-50 hover:opacity-100 duration-150`}
                                 onClick={(e) => {
                                   handleActiveTab(i, index);
                                 }}>
-                                {tab.id.replace(/\.[^.]*$/, "")}
+                                <div>{tab.id.replace(/\.[^.]*$/, "")}</div>
+                                <div>
+                                  {" "}
+                                  {tab.id.includes(".pcol") ? (
+                                    <span className="border-lightgreen border rounded-md px-1">
+                                      collection
+                                    </span>
+                                  ) : tab.id.includes(".pas") ? (
+                                    <span className="border-lightgreen border rounded-md px-1">
+                                      asset
+                                    </span>
+                                  ) : null}
+                                </div>
                                 {changed[i] ? (
                                   <>
                                     *
@@ -175,7 +188,9 @@ export const TabGroup = ({
                 <Tab.Panels className="h-full w-full overflow-hidden">
                   {tabs?.map((tab, index) => {
                     return (
-                      <Tab.Panel key={index} className="h-full w-full overflow-hidden">
+                      <Tab.Panel
+                        key={index}
+                        className="h-full w-full overflow-hidden">
                         <Split
                           className="h-full w-full flex flex-col"
                           direction={"vertical"}
@@ -193,6 +208,8 @@ export const TabGroup = ({
                             <ImagePreview index={index} file={tab} dir={dir} />
                           ) : tab.id.includes(".pcol") ? (
                             <Collection file={tab} dir={dir} />
+                          ) : tab.id.includes(".pas") ? (
+                            <Asset file={tab} dir={dir} />
                           ) : null}
                         </Split>
                       </Tab.Panel>

@@ -6,7 +6,7 @@ export const Modal = ({children, name, modal, toggle }) => {
         <Dialog open={modal} onClose={() => {toggle()}}>
             <div className="fixed inset-0 bg-[#00000099]" aria-hidden="true">
                 <div className="z-10 fixed inset-0 flex items-center p-4  justify-center">
-                    <Dialog.Panel className="bg-black border border-lightgreen p-10 rounded-xl space-y-5 max-w-[800px] min-w-[300px] max-h-[80vh]">
+                    <Dialog.Panel className="bg-black border border-lightgreen p-10 rounded-md space-y-5 min-w-[300px] max-h-[80vh]">
                         <div className='flex items-center justify-between'>
                             <div className='font-black'>
                                 {name}

@@ -7,6 +7,7 @@ export const CollectionViewport = ({
   content,
   cellHeight,
   cellWidth,
+  handleCellClick,
 }) => {
   let collectionRef = useRef<HTMLTableElement>(null);
   let collectionContainerRef = useRef<HTMLDivElement>(null);
@@ -58,10 +59,14 @@ export const CollectionViewport = ({
                 {item?.map((asset, index) => {
                   return (
                     <td
+                      tabIndex={1}
                       className={`p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
                       style={{
                         width: `${cellWidth}vh`,
                         height: `${cellHeight}vh`,
+                      }}
+                      onClick={() => {
+                        handleCellClick(i, index, asset);
                       }}>
                       {asset.name ? (
                         <img

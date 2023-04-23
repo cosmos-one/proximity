@@ -6,6 +6,13 @@ import { Slider } from "./Slider";
 import { CollectionViewport } from "./CollectionViewport";
 import { HorizontalLine } from "./HorizontalLine";
 import { CollectionUtilities } from "./CollectionUtilities";
+import * as Types from "@/types";
+
+interface ActiveCellType {
+  cellY: number;
+  cellX: number;
+  asset: Types.AssetTypeCell;
+}
 
 export const Collection = ({ file, dir }) => {
   //Collection
@@ -28,6 +35,8 @@ export const Collection = ({ file, dir }) => {
   //Panels
   const [collectionUtilities, setCollectionUtilities] = useState(true);
 
+  const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
+
   useEffect(() => {
     setCollection(file.data);
     setName(file.data.body.name);
@@ -47,6 +56,14 @@ export const Collection = ({ file, dir }) => {
     setCollectionViewport({ ...collectionViewport, scale: newScale });
   };
 
+  const handleCellClick = (
+    row: number,
+    column: number,
+    asset: Types.AssetTypeCell
+  ) => {
+    setActiveCell({ cellY: row, cellX: column, asset: asset });
+  };
+
   return (
     <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
       <Split
@@ -55,7 +72,10 @@ export const Collection = ({ file, dir }) => {
         sizes={[0.7, 0.2]}
         minSize={150}
         gutterSize={10}>
-        <div className={`h-full w-full border border-lightgreen ${collectionUtilities ? "rounded-tl-md rounded-bl-md" : "rounded-t-md"}`}>
+        <div
+          className={`h-full w-full flex flex-col border border-lightgreen ${
+            collectionUtilities ? "rounded-tl-md rounded-bl-md" : "rounded-t-md"
+          }`}>
           <div className="flex items-center justify-between p-2">
             <div className="text-xs italic">
               {lastModified ? <Time dateString={lastModified} /> : null}
@@ -79,7 +99,10 @@ export const Collection = ({ file, dir }) => {
                   viewBox="0 0 24 24"
                   strokeWidth={1}
                   stroke="currentColor"
-                  className={`w-6 h-6 hover:bg-slate-700 rounded-md hover:cursor-pointer`} onClick={() => {setCollectionUtilities(!collectionUtilities)}}>
+                  className={`w-6 h-6 hover:bg-slate-700 rounded-md hover:cursor-pointer`}
+                  onClick={() => {
+                    setCollectionUtilities(!collectionUtilities);
+                  }}>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -90,17 +113,20 @@ export const Collection = ({ file, dir }) => {
             </div>
           </div>
           <HorizontalLine />
-          <div className="w-full h-full">
+          <div className="w-full h-full overflow-hidden">
             <CollectionViewport
               setCollectionViewport={setCollectionViewport}
               collectionViewport={collectionViewport}
               content={content}
               cellHeight={cellHeight}
               cellWidth={cellWidth}
+              handleCellClick={handleCellClick}
             />
           </div>
         </div>
-        {collectionUtilities ? (<CollectionUtilities collection={collection}/>) : null}
+        {collectionUtilities ? (
+          <CollectionUtilities collection={collection} activeCell={activeCell}/>
+        ) : null}
       </Split>
     </div>
   );

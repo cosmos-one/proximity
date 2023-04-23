@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Tooltip } from "@/components/Tooltip";
 import { HorizontalLine } from "./HorizontalLine";
@@ -9,8 +9,20 @@ const DynamicCollectionInformationPanel = dynamic(() =>
   )
 );
 
-export const CollectionUtilities = ({ collection }) => {
+const DynamicCollectionPropertiesPanel = dynamic(() =>
+  import("@/components/CollectionPropertiesPanel").then(
+    (mod) => mod.CollectionPropertiesPanel
+  )
+);
+
+export const CollectionUtilities = ({ collection, activeCell }) => {
   const [activePanel, setActivePanel] = useState(0);
+
+  useEffect(() => {
+    if (activeCell != null) {
+      setActivePanel(1);
+    }
+  }, [collection, activeCell]);
 
   return (
     <div
@@ -116,10 +128,14 @@ export const CollectionUtilities = ({ collection }) => {
           </Tooltip>
         </div>
       </div>
-      <HorizontalLine/>
+      <HorizontalLine />
       <DynamicCollectionInformationPanel
         active={activePanel === 0}
         collection={collection}
+      />
+      <DynamicCollectionPropertiesPanel
+        active={activePanel === 1}
+        activeCell={activeCell}
       />
     </div>
   );

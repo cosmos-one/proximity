@@ -9,9 +9,11 @@ import { ipcRenderer } from "electron";
 import { Toaster } from "react-hot-toast";
 import { Toolbar } from "@/components/Toolbar";
 import { FilePanel } from "@/components/FilePanel";
+import { CollectionPanel } from "@/components/CollectionPanel";
 import { TabGroup } from "@/components/TabGroup";
 import { Footer } from "@/components/Footer";
 import { WindowBar } from "@/components/WindowBar";
+import { AssetPanel } from "@/components/AssetPanel";
 
 function Home() {
   // Project
@@ -63,14 +65,13 @@ function Home() {
   };
 
   const handleRefresh = async () => {
-    console.log("working")
     ipcRenderer.invoke("open-directory", dir).then((result) => {
       let processedFiles = result.files.map((file) => {
         return file;
       });
       setFiles(processedFiles);
     });
-  }
+  };
 
   //Tab Functions
   const handleNewTabGroup = () => {
@@ -85,39 +86,56 @@ function Home() {
 
   const handleNewTab = (fileName) => {
     if (tabs[activeTabGroup]) {
-      if (tabs[activeTabGroup].filter((tab) => tab.id === fileName).length > 0) {
+      if (
+        tabs[activeTabGroup].filter((tab) => tab.id === fileName).length > 0
+      ) {
         return;
       } else {
         const update = [...tabs];
         if (fileName.includes(".md")) {
-          const fullPath = path.join(dir, fileName)
-            ipcRenderer.invoke("markdown", { req: "GET", path: fullPath })
+          const fullPath = path.join(dir, fileName);
+          ipcRenderer
+            .invoke("markdown", { req: "GET", path: fullPath })
             .then((res) => {
-                update[activeTabGroup].push(res);
-                setTabs(update);
-                const updateActiveTab = activeTab;
-                updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
-                setActiveTab(updateActiveTab);
-            })
-        } else if (fileName.includes(".jpg")){
-          const fullPath = path.join(dir, fileName)
+              update[activeTabGroup].push(res);
+              setTabs(update);
+              const updateActiveTab = activeTab;
+              updateActiveTab[activeTabGroup] =
+                update[activeTabGroup].length - 1;
+              setActiveTab(updateActiveTab);
+            });
+        } else if (fileName.includes(".jpg")) {
+          const fullPath = path.join(dir, fileName);
           fs.readFile(fullPath, (err, res) => {
             if (err) throw err;
-            update[activeTabGroup].push({id: fileName, data: res});
+            update[activeTabGroup].push({ id: fileName, data: res });
             setTabs(update);
             const updateActiveTab = activeTab;
             updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
             setActiveTab(updateActiveTab);
           });
           return;
-        } else if (fileName.includes(".pcol")){
-          const fullPath = path.join(dir, fileName)
-          ipcRenderer.invoke("collection", { req: "GET", path: fullPath })
+        } else if (fileName.includes(".pcol")) {
+          const fullPath = path.join(dir, fileName);
+          ipcRenderer
+            .invoke("collection", { req: "GET", path: fullPath })
+            .then((res) => {
+              update[activeTabGroup].push(res);
+              setTabs(update);
+              const updateActiveTab = activeTab;
+              updateActiveTab[activeTabGroup] =
+                update[activeTabGroup].length - 1;
+              setActiveTab(updateActiveTab);
+            });
+        } else if (fileName.includes(".pas")) {
+          const fullPath = path.join(dir, fileName);
+          ipcRenderer.invoke("asset", { req: "GET", path: fullPath })
           .then((res) => {
             update[activeTabGroup].push(res);
             setTabs(update);
             const updateActiveTab = activeTab;
-            updateActiveTab[activeTabGroup] = update[activeTabGroup].length - 1;
+            updateActiveTab[activeTabGroup] =
+              update[activeTabGroup].length - 1;
             setActiveTab(updateActiveTab);
           })
         }
@@ -158,7 +176,7 @@ function Home() {
       </Head>
       <main className="h-screen max-h-screen flex flex-col overflow-hidden focus:outline-none">
         <Toaster position="top-center" reverseOrder={false} />
-        <WindowBar dir={dir}/>
+        <WindowBar dir={dir} />
         <div className="h-full w-full flex overflow-hidden">
           <Toolbar
             handleActiveTool={handleActiveTool}
@@ -176,11 +194,31 @@ function Home() {
               {panel ? (
                 <div className="h-full overflow-y-hidden">
                   <FilePanel
-                    refresh={() => {handleRefresh()}}
+                    refresh={() => {
+                      handleRefresh();
+                    }}
                     active={activeTool === 0}
                     dir={dir}
                     files={files}
                     handleOpenNewDirectory={handleOpenNewDirectory}
+                    handleNewTab={handleNewTab}
+                  />
+                  <CollectionPanel
+                    refresh={() => {
+                      handleRefresh();
+                    }}
+                    active={activeTool === 1}
+                    dir={dir}
+                    files={files}
+                    handleNewTab={handleNewTab}
+                  />
+                  <AssetPanel
+                    refresh={() => {
+                      handleRefresh();
+                    }}
+                    active={activeTool === 2}
+                    dir={dir}
+                    files={files}
                     handleNewTab={handleNewTab}
                   />
                 </div>
@@ -193,7 +231,7 @@ function Home() {
                 {tabs?.map((group, index) => {
                   return (
                     <TabGroup
-                    dir={dir}
+                      dir={dir}
                       active={index === activeTabGroup ? true : false}
                       key={index}
                       tabs={group}
