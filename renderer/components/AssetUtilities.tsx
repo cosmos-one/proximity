@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { HorizontalLine } from "./HorizontalLine";
 
-export const AssetUtilities = ({ asset, imageData }) => {
+export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, handleSaved }) => {
   const [name, setName] = useState("");
   const [source, setSource] = useState("");
   const [notes, setNotes] = useState("");
@@ -53,6 +53,11 @@ export const AssetUtilities = ({ asset, imageData }) => {
             value={name}
             onChange={(e) => {
               setName(e.target.value);
+              if (e.target.value != asset?.body?.name) {
+                handleChanged(tabIndex);
+              } else {
+                handleSaved(tabIndex)
+              }
             }}
             placeholder="Name"
           />
@@ -80,7 +85,7 @@ export const AssetUtilities = ({ asset, imageData }) => {
         </div>
         <div></div>
         <HorizontalLine />
-        <div>Type:<span className="italic"> {type}</span></div>
+        <div>Type:<span className="italic">{type}</span></div>
       </div>
     </div>
   );

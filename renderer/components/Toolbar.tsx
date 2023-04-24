@@ -83,21 +83,6 @@ export const Toolbar: React.FC<ToolBarProps> = ({
           </div>
         </Tooltip>
       </div>
-      <div>
-        <div className="-rotate-90 absolute origin-top-left">
-          <a
-            className="hover:cursor-pointer hover:opacity-70 duration-100"
-            href="https://www.cosmosone.xyz/"
-            target={"_blank"}
-            rel="noreferrer">
-            Cosmosone
-          </a>{" "}
-          /{" "}
-          <span className="hover:cursor-pointer hover:opacity-70 duration-100">
-            Proximity
-          </span>
-        </div>
-      </div>
     </div>
   );
 };

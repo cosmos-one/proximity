@@ -49,7 +49,7 @@ export const TabGroup = ({
     const extension = filename.split(".").pop().toLowerCase();
     return imageExtensions.includes(extension);
   };
-
+  
   return (
     <>
       {dir ? (
@@ -88,7 +88,7 @@ export const TabGroup = ({
                                     </span>
                                   ) : null}
                                 </div>
-                                {changed[i] ? (
+                                {/* {changed[i] ? (
                                   <>
                                     *
                                     <Tooltip
@@ -150,7 +150,34 @@ export const TabGroup = ({
                                       d="M6 18L18 6M6 6l12 12"
                                     />
                                   </svg>
-                                )}
+                                )} */}
+                                {
+                                  selected ? 
+                                  (
+                                    <Tooltip
+                                    tooltip={"Close (⌥W)"}
+                                    position={"translate-y-10 translate-x-4"}>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth={1}
+                                      stroke="currentColor"
+                                      className="w-4 h-4 rounded-md hover:bg-hlgreen ml-3"
+                                      onClick={(e) => {
+                                        handleCloseTab(tab.id);
+                                      }}>
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6 18L18 6M6 6l12 12"
+                                      />
+                                    </svg>
+                                  </Tooltip>
+                                  )
+                                  :
+                                  null
+                                }
                               </div>
                             )}
                           </Tab>
@@ -214,7 +241,7 @@ export const TabGroup = ({
                           tab.id.includes(".pcol") ? (
                             <Collection file={tab} dir={dir} />
                           ) : tab.id.includes(".pas") ? (
-                            <Asset file={tab} dir={dir} />
+                            <Asset file={tab} dir={dir} tabIndex={index} handleChanged={handleChanged} handleSaved={handleSaved}/>
                           ) : null}
                         </Split>
                       </Tab.Panel>

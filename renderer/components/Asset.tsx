@@ -6,7 +6,7 @@ import { AssetUtilities } from "./AssetUtilities";
 import { Time } from "./Time";
 import { AssetViewport } from "./AssetViewport";
 
-export const Asset = ({ file, dir }) => {
+export const Asset = ({ file, dir, tabIndex, handleChanged, handleSaved }) => {
   const [assetUtilities, setAssetUtilities] = useState(true);
   const [asset, setAsset] = useState({});
   const [lastModified, setLastModified] = useState("");
@@ -16,8 +16,8 @@ export const Asset = ({ file, dir }) => {
   useEffect(() => {
     setAsset(file.meta);
     setLastModified(`${file.meta.body.lastModified}`);
-    setImageData(file.heroImage);
-    setFileData(file.fileData);
+    setImageData(Buffer.from(file.heroImage));
+    setFileData(Buffer.from(file.fileData));
   }, [file]);
 
   return (
@@ -60,10 +60,10 @@ export const Asset = ({ file, dir }) => {
             </div>
           </div>
           <HorizontalLine />
-          <AssetViewport asset={asset} fileData={fileData} />
+          <AssetViewport asset={asset} fileData={fileData} heroImage={imageData}/>
         </div>
         {assetUtilities ? (
-          <AssetUtilities asset={asset} imageData={imageData} />
+          <AssetUtilities asset={asset} imageData={imageData} tabIndex={tabIndex} handleChanged={handleChanged} handleSaved={handleSaved}/>
         ) : null}
       </Split>
     </div>

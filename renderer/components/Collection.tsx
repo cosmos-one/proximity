@@ -7,6 +7,7 @@ import { CollectionViewport } from "./CollectionViewport";
 import { HorizontalLine } from "./HorizontalLine";
 import { CollectionUtilities } from "./CollectionUtilities";
 import * as Types from "@/types";
+import { IoExpandOutline } from "react-icons/io5";
 
 interface ActiveCellType {
   cellY: number;
@@ -89,7 +90,15 @@ export const Collection = ({ file, dir }) => {
                 setValue={handleCollectionViewportScaleSlider}
               />
             </div>
-            <div>
+            <div className="flex items-center space-x-2">
+              <Tooltip
+                tooltip="Reset Viewport"
+                position={"translate-y-10 -translate-x-16"}>
+                  <IoExpandOutline className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
+                  onClick={() => {
+                    setCollectionViewport({ x: 0, y: 0, scale: 1 });
+                  }}/>
+              </Tooltip>
               <Tooltip
                 tooltip="Utilities"
                 position={"translate-y-10 -translate-x-16"}>
@@ -99,7 +108,7 @@ export const Collection = ({ file, dir }) => {
                   viewBox="0 0 24 24"
                   strokeWidth={1}
                   stroke="currentColor"
-                  className={`w-6 h-6 hover:bg-slate-700 rounded-md hover:cursor-pointer`}
+                  className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
                   onClick={() => {
                     setCollectionUtilities(!collectionUtilities);
                   }}>
@@ -125,7 +134,10 @@ export const Collection = ({ file, dir }) => {
           </div>
         </div>
         {collectionUtilities ? (
-          <CollectionUtilities collection={collection} activeCell={activeCell}/>
+          <CollectionUtilities
+            collection={collection}
+            activeCell={activeCell}
+          />
         ) : null}
       </Split>
     </div>

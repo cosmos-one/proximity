@@ -14,6 +14,7 @@ import {
   BsFillGrid3X3GapFill,
 } from "react-icons/bs";
 import { GiBlackBook } from "react-icons/gi";
+import { RiFileUnknowFill } from "react-icons/ri";
 
 export const FileIcon = ({ fileType }) => {
   return (
@@ -42,7 +43,7 @@ export const FileIcon = ({ fileType }) => {
         <SiMicrosoftexcel />
       ) : fileType === ".3dm" ? (
         <SiRhinoceros />
-      ) : null}
+      ) : <RiFileUnknowFill/>}
     </>
   );
 };
