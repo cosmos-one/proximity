@@ -19,7 +19,7 @@ module.exports = {
         blue: "#0000ff",
         red: "#ff0000",
         lightgreen: "#00ff0088",
-        hlgreen: "#00ff0022"
+        hlgreen: "#00ff0033"
       },
       typography: ({ theme }) => ({
         green: {

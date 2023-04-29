@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Time } from "./Time";
 import toast from "react-hot-toast";
 import { RingLoader } from "react-spinners";
+import { ImageViewer } from "./ImageViewer";
 
 interface ActiveCellType {
   cellY: number;
   cellX: number;
-  asset: Types.AssetTypeExtended;
+  asset: Types.AssetContentType;
 }
 
 type PropertiesPanelProps = {
@@ -20,14 +21,24 @@ export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
   active,
   activeCell,
 }) => {
-  const [asset, setAsset] = useState<Types.AssetTypeExtended | null>(null);
+  const [asset, setAsset] = useState<Types.AssetContentType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [imageLink, setImageLink] = useState<boolean>(false);
 
   useEffect(() => {
     if (activeCell) {
       setLoading(true);
       setAsset(activeCell.asset);
       setLoading(false);
+      if (activeCell.asset.heroImage) {
+        if (activeCell.asset.heroImage[0] === "h") {
+          setImageLink(true);
+        }
+      } else if (activeCell.asset.file) {
+        if (activeCell.asset.file[0] === "h") {
+          setImageLink(true);
+        }
+      }
     }
   }, [activeCell]);
 
@@ -44,10 +55,16 @@ export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
             }`}>
             {asset?.file ? (
               <a href={asset?.file} target="_blank" rel="noreferrer">
-                <img
-                  className={`max-h-[80vh] border border-lightgreen`}
-                  src={activeCell?.asset.heroImage || activeCell?.asset.file}
-                />
+                {imageLink ? (
+                  <img
+                    className={`max-h-[80vh] border border-lightgreen`}
+                    src={activeCell?.asset.heroImage || activeCell?.asset.file}
+                  />
+                ) : (
+                  <ImageViewer
+                    imageData={Buffer.from(activeCell?.asset.heroImage)}
+                  />
+                )}
               </a>
             ) : (
               <div className="flex items-center justify-center opacity-50 w-full h-[200px]">
@@ -57,7 +74,7 @@ export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
           </div>
           <div className="p-2 space-y-2 w-full">
             <div className={`font-bold`}>{asset?.name}</div>
-            {asset?.file ? (
+            {asset?.file && asset?.file[0] === "h" ? (
               <a
                 href={asset?.file}
                 target="_blank"
@@ -90,9 +107,6 @@ export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   <span className="opacity-50">(Last Modified)</span>
                 </>
               ) : null}
-            </div>
-            <div>
-              {asset?.user?.name ? <>Added by: {asset?.user?.name}</> : null}
             </div>
           </div>
         </>

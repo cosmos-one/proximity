@@ -127,7 +127,12 @@ export const AssetCreateModal: React.FC<AssetCreateModalProps> = ({
           req: "POST",
           path: dir,
           data: previews,
-        });
+        }).then(() => {
+          setPreviews([]);
+          setSourceLink("");
+          refresh();
+          toggle();
+        })
         toast.promise(
           createAssets,
           {
@@ -143,8 +148,6 @@ export const AssetCreateModal: React.FC<AssetCreateModalProps> = ({
             },
           }
         );
-        refresh();
-        toggle();
       } catch (err) {
         toast.error(`Something went wrong. Please try again.`, {
           style: {

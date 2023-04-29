@@ -9,6 +9,8 @@ import {
   readMarkdown,
   createAssets,
   readAsset,
+  updateAsset,
+  readAllAssetPaths,
   createCollection,
   readCollection,
 } from "./helpers";
@@ -121,5 +123,22 @@ ipcMain.handle("asset", async (event, message) => {
   } else if (message.req === "POST") {
     let asset = await createAssets(message.path, message.data);
     return asset;
+  } else if (message.req === "PATCH") {
+    let asset = await updateAsset(message.path, message.original, message.update, message.fileData, message.imageData);
+    return asset
+  }
+});
+
+ipcMain.handle("assets", async (event, message) => {
+  if (!message.req) {
+    return;
+  } else if (message.req === "GET") {
+    let assetPaths = await readAllAssetPaths(message.path);
+    let assets = [];
+    for (let i = 0; i < assetPaths.files.length; i++) {
+      let asset = await readAsset(assetPaths.files[i]);
+      assets.push(asset);
+    }
+    return assets;
   }
 });

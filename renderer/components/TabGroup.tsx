@@ -1,13 +1,19 @@
-import { Tab } from "@headlessui/react";
+import path from "path";
 import { useEffect, useState } from "react";
+//Components
 import Split from "react-split-it";
-import { Editor } from "./Editor";
-import { Tooltip } from "./Tooltip";
-import { Welcome } from "./Welcome";
-import { Image } from "./Image";
-import { PDF } from "./PDF";
+import { Tab } from "@headlessui/react";
 import { Collection } from "./Collection";
 import { Asset } from "./Asset";
+import { Editor } from "./Editor";
+import { Image } from "./Image";
+import { PDF } from "./PDF";
+import { Tooltip } from "./Tooltip";
+import { Welcome } from "./Welcome";
+//Icons
+import { BsCircleFill } from "react-icons/bs";
+import { FileIcon } from "./FileIcon";
+
 
 export const TabGroup = ({
   dir,
@@ -21,6 +27,11 @@ export const TabGroup = ({
   handleNewTabGroup,
   handleActiveTabGroup,
   handleOpenDirectory,
+  setTabs,
+  allTabs,
+  tabGroupIndex,
+  refresh,
+  updateTab,
 }) => {
   const [changed, setChanged] = useState([]);
 
@@ -49,7 +60,7 @@ export const TabGroup = ({
     const extension = filename.split(".").pop().toLowerCase();
     return imageExtensions.includes(extension);
   };
-  
+
   return (
     <>
       {dir ? (
@@ -66,17 +77,22 @@ export const TabGroup = ({
                     <div className="flex whitespace-nowrap overflow-scroll scrollBarHide">
                       {tabs?.map((tab, i) => {
                         return (
-                          <Tab key={i} className={"focus:outline-none focus:border-none"}>
+                          <Tab
+                            key={i}
+                            className={"focus:outline-none focus:border-none"}>
                             {({ selected }) => (
                               <div
-                                className={`group flex items-center space-x-2 ${
+                                className={`group flex items-center ${
                                   selected ? " opacity-100" : "opacity-30"
-                                } focus:border-none focus:outline-none p-2 rounded-sm hover:opacity-100 duration-150`}
+                                } focus:border-none focus:outline-none p-2 rounded-sm hover:opacity-100 duration-150 max-w-[300px]`}
                                 onClick={(e) => {
                                   handleActiveTab(i, index);
                                 }}>
-                                <div>{tab.id.replace(/\.[^.]*$/, "")}</div>
-                                <div>
+                                  <div>
+                                    <FileIcon fileType={path.extname(tab.id)}/>
+                                  </div>
+                                <div className="ml-2 truncate">{tab.id.replace(/\.[^.]*$/, "")}</div>
+                                <div className="ml-2 truncate">
                                   {" "}
                                   {tab.id.includes(".pcol") ? (
                                     <span className="border-lightgreen border rounded-md px-1">
@@ -88,9 +104,9 @@ export const TabGroup = ({
                                     </span>
                                   ) : null}
                                 </div>
-                                {/* {changed[i] ? (
+                                {changed[i] ? (
                                   <>
-                                    *
+                                    <span className="ml-2"><BsCircleFill className="h-2 w-2"/></span>
                                     <Tooltip
                                       tooltip={"Close (⌥W)"}
                                       position={"translate-y-10 translate-x-4"}>
@@ -150,34 +166,7 @@ export const TabGroup = ({
                                       d="M6 18L18 6M6 6l12 12"
                                     />
                                   </svg>
-                                )} */}
-                                {
-                                  selected ? 
-                                  (
-                                    <Tooltip
-                                    tooltip={"Close (⌥W)"}
-                                    position={"translate-y-10 translate-x-4"}>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      strokeWidth={1}
-                                      stroke="currentColor"
-                                      className="w-4 h-4 rounded-md hover:bg-hlgreen ml-3"
-                                      onClick={(e) => {
-                                        handleCloseTab(tab.id);
-                                      }}>
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M6 18L18 6M6 6l12 12"
-                                      />
-                                    </svg>
-                                  </Tooltip>
-                                  )
-                                  :
-                                  null
-                                }
+                                )}
                               </div>
                             )}
                           </Tab>
@@ -218,7 +207,7 @@ export const TabGroup = ({
                     return (
                       <Tab.Panel
                         key={index}
-                        className="h-full w-full overflow-hidden">
+                        className="flex flex-col h-full w-full overflow-hidden">
                         <Split
                           className="h-full w-full flex flex-col"
                           direction={"vertical"}
@@ -233,15 +222,25 @@ export const TabGroup = ({
                               dir={dir}
                             />
                           ) : isImage(tab.id) ? (
-                            <Image file={tab}/>
+                            <Image file={tab} />
                           ) : tab.id.includes(".pdf") ? (
-                            <PDF file={tab}/>
-                          ) :
-                          
-                          tab.id.includes(".pcol") ? (
+                            <PDF file={tab} />
+                          ) : tab.id.includes(".pcol") ? (
                             <Collection file={tab} dir={dir} />
                           ) : tab.id.includes(".pas") ? (
-                            <Asset file={tab} dir={dir} tabIndex={index} handleChanged={handleChanged} handleSaved={handleSaved}/>
+                            <Asset
+                              file={tab}
+                              dir={dir}
+                              tabIndex={index}
+                              handleChanged={handleChanged}
+                              handleSaved={handleSaved}
+                              unsaved={changed[index]}
+                              setTabs={setTabs}
+                              allTabs={allTabs}
+                              tabGroupIndex={tabGroupIndex}
+                              refresh={refresh}
+                              updateTab={updateTab}
+                            />
                           ) : null}
                         </Split>
                       </Tab.Panel>

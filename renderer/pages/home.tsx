@@ -16,6 +16,8 @@ import { WindowBar } from "@/components/WindowBar";
 import { AssetPanel } from "@/components/AssetPanel";
 
 function Home() {
+  //Status
+  const [refreshing, setRefreshing] = useState(false);
   // Project
   const [dir, setDir] = useState("");
   const [files, setFiles] = useState([]);
@@ -65,11 +67,15 @@ function Home() {
   };
 
   const handleRefresh = async () => {
+    setRefreshing(true);
     ipcRenderer.invoke("open-directory", dir).then((result) => {
       let processedFiles = result.files.map((file) => {
         return file;
       });
       setFiles(processedFiles);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1500);
     });
   };
 
@@ -88,7 +94,7 @@ function Home() {
     const imageExtensions = /\.(jpe?g|png|gif|bmp)$/i;
     return imageExtensions.test(fileName);
   }
-  
+
   const handleNewTab = (fileName) => {
     if (tabs[activeTabGroup]) {
       if (
@@ -134,15 +140,16 @@ function Home() {
             });
         } else if (fileName.includes(".pas")) {
           const fullPath = path.join(dir, fileName);
-          ipcRenderer.invoke("asset", { req: "GET", path: fullPath })
-          .then((res) => {
-            update[activeTabGroup].push(res);
-            setTabs(update);
-            const updateActiveTab = activeTab;
-            updateActiveTab[activeTabGroup] =
-              update[activeTabGroup].length - 1;
-            setActiveTab(updateActiveTab);
-          })
+          ipcRenderer
+            .invoke("asset", { req: "GET", path: fullPath })
+            .then((res) => {
+              update[activeTabGroup].push(res);
+              setTabs(update);
+              const updateActiveTab = activeTab;
+              updateActiveTab[activeTabGroup] =
+                update[activeTabGroup].length - 1;
+              setActiveTab(updateActiveTab);
+            });
         } else if (fileName.includes(".pdf")) {
           const fullPath = path.join(dir, fileName);
           fs.readFile(fullPath, (err, res) => {
@@ -185,6 +192,12 @@ function Home() {
     setActiveTab(updateActiveTab);
   };
 
+  const updateTab = (tabIndex, data) => {
+    const update = [...tabs];
+    update[activeTabGroup][tabIndex] = data;
+    setTabs(update);
+  }
+
   return (
     <div>
       <Head>
@@ -192,7 +205,13 @@ function Home() {
       </Head>
       <main className="h-screen max-h-screen flex flex-col overflow-hidden focus:outline-none">
         <Toaster position="top-center" reverseOrder={false} />
-        <WindowBar dir={dir} />
+        <WindowBar
+          dir={dir}
+          refresh={() => {
+            handleRefresh();
+          }}
+          refreshing={refreshing}
+        />
         <div className="h-full w-full flex overflow-hidden">
           <Toolbar
             handleActiveTool={handleActiveTool}
@@ -259,6 +278,11 @@ function Home() {
                       handleNewTabGroup={handleNewTabGroup}
                       handleActiveTabGroup={handleActiveTabGroup}
                       handleOpenDirectory={handleOpenDirectory}
+                      setTabs={setTabs}
+                      allTabs={tabs}
+                      tabGroupIndex={index}
+                      refresh={handleRefresh}
+                      updateTab={updateTab}
                     />
                   );
                 })}
@@ -266,7 +290,7 @@ function Home() {
             </Split>
           </div>
         </div>
-        <Footer />
+        <Footer refreshing={refreshing}/>
       </main>
     </div>
   );

@@ -1,44 +1,58 @@
-import fs from 'fs';
-import path from 'path';
-import * as Types from '@/types'
+import fs from "fs";
+import path from "path";
+import * as Types from "@/types";
+import cuid from "cuid";
 
-export default async function createCollection(directory: string, name: string, content?: string): Promise<Types.CollectionFileType> {
+export default async function createCollection(
+  directory: string,
+  name: string,
+  content?: string
+): Promise<Types.CollectionFileType> {
   if (content) {
     const filePath = path.join(directory, name + ".pcol");
     fs.writeFile(filePath, JSON.stringify(content), (err) => {
       if (err) throw err;
     });
-    const file: Types.CollectionFileType = { id: `${name}.pcol`, file: `${name}.pcol`, data: content };
+    const file: Types.CollectionFileType = {
+      id: `${name}.pcol`,
+      file: `${name}.pcol`,
+      data: content,
+    };
     return file;
   } else {
-    const filePath = path.join(directory, name + '.pcol');
-    let columns = []
+    const filePath = path.join(directory, name + ".pcol");
+    let columns = [];
     for (let i = 0; i < 10; i++) {
-    columns.push({})
+      columns.push({});
     }
-    let content = []
+    let content = [];
     for (let i = 0; i < 5; i++) {
-    content.push(columns)
+      content.push(columns);
     }
     const body = {
-        "name": name,
-        "description": "",
-        "x": 10,
-        "y": 5,
-        "content": content,
-        "createdAt": new Date().toISOString(),
-        "lastModified": new Date().toISOString(),
-    }
+      id: cuid(),
+      name: name,
+      description: "",
+      collectionX: 10,
+      collectionY: 5,
+      content: content,
+      createdAt: new Date().toISOString(),
+      lastModified: new Date().toISOString(),
+    };
     const collectionFile = {
-        "type": "collection",
-        "name": "proximity-native",
-        "version": "0.1.0",
-        "body": body
-    }
+      type: "collection",
+      name: "proximity-native",
+      version: "0.1.0",
+      body: body,
+    };
     fs.writeFile(filePath, JSON.stringify(collectionFile), (err) => {
       if (err) throw err;
     });
-    const file: Types.CollectionFileType = { id: `${name}.pcol`, file: `${name}.pcol`, data: collectionFile};
+    const file: Types.CollectionFileType = {
+      id: `${name}.pcol`,
+      file: `${name}.pcol`,
+      data: collectionFile,
+    };
     return file;
   }
 }

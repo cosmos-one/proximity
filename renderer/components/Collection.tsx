@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import Split from "react-split-it";
+//Types
+import * as Types from "@/types";
+//Components
 import { Time } from "./Time";
+import { HorizontalLine } from "./HorizontalLine";
 import { Tooltip } from "./Tooltip";
 import { Slider } from "./Slider";
 import { CollectionViewport } from "./CollectionViewport";
-import { HorizontalLine } from "./HorizontalLine";
 import { CollectionUtilities } from "./CollectionUtilities";
-import * as Types from "@/types";
+import { CollectionFloodModal } from "./CollectionFloodModal";
+//Icons
 import { IoExpandOutline } from "react-icons/io5";
+import { MdWaves } from "react-icons/md";
+
 
 interface ActiveCellType {
   cellY: number;
@@ -25,6 +31,10 @@ export const Collection = ({ file, dir }) => {
   const [cellHeight, setCellHeight] = useState(0);
   const [content, setContent] = useState([]);
   const [lastModified, setLastModified] = useState("");
+  const [emptyCells, setEmptyCells] = useState(0);
+
+  //Modals
+  const [collectionFloodModal, setCollectionFloodModal] = useState(false);
 
   //Viewport
   const [collectionViewport, setCollectionViewport] = useState({
@@ -35,21 +45,24 @@ export const Collection = ({ file, dir }) => {
 
   //Panels
   const [collectionUtilities, setCollectionUtilities] = useState(true);
-
   const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
 
   useEffect(() => {
     setCollection(file.data);
     setName(file.data.body.name);
-    setCollectionX(file.data.body.x);
-    setCollectionY(file.data.body.y);
+    setCollectionX(file.data.body.collectionX);
+    setCollectionY(file.data.body.collectionY);
     setContent(file.data.body.content);
     setLastModified(`${file.data.body.lastModified}`);
     //Cell Aspect Ratio
-    let width = 100 / Number(file.data.body.x);
+    let width = 100 / Number(file.data.body.collectionX);
     let height = width / 1.5;
     setCellWidth(width);
     setCellHeight(height);
+    //Empty Cells
+    const total = file.data.body.collectionX * file.data.body.collectionY
+    const filled = file.data.body.content.flat().filter((item: any) => item.id).length
+    setEmptyCells(total - filled)
   }, [file]);
 
   const handleCollectionViewportScaleSlider = (scale: number[]) => {
@@ -64,6 +77,10 @@ export const Collection = ({ file, dir }) => {
   ) => {
     setActiveCell({ cellY: row, cellX: column, asset: asset });
   };
+
+  const updateContent = (content: any[][]) => {
+    setContent(content)
+  }
 
   return (
     <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
@@ -92,12 +109,25 @@ export const Collection = ({ file, dir }) => {
             </div>
             <div className="flex items-center space-x-2">
               <Tooltip
+                tooltip="Flood"
+                position={"translate-y-10 -translate-x-10"}>
+                <MdWaves
+                  className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
+                  onClick={() => {
+                    setCollectionFloodModal(!collectionFloodModal);
+                  }}
+                />
+              </Tooltip>
+              <CollectionFloodModal dir={dir} modal={collectionFloodModal} toggle={() => {setCollectionFloodModal(!collectionFloodModal)}} empty={emptyCells} setEmptyCells={setEmptyCells} content={content} updateContent={updateContent}/>
+              <Tooltip
                 tooltip="Reset Viewport"
                 position={"translate-y-10 -translate-x-16"}>
-                  <IoExpandOutline className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
+                <IoExpandOutline
+                  className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
                   onClick={() => {
                     setCollectionViewport({ x: 0, y: 0, scale: 1 });
-                  }}/>
+                  }}
+                />
               </Tooltip>
               <Tooltip
                 tooltip="Utilities"

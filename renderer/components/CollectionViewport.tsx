@@ -65,18 +65,19 @@ export const CollectionViewport = ({
                       style={{
                         width: `${cellWidth}vh`,
                         height: `${cellHeight}vh`,
+                        backgroundImage: `url(${asset.heroImage || asset.file})`,
                       }}
                       onClick={() => {
                         handleCellClick(i, index, asset);
                       }}>
-                      {asset.name ? (
+                      {/* {asset.name ? (
                         <img
                           src={asset.file}
                           className="w-full h-full object-cover"
                           draggable={false}
                           alt={asset.name}
                         />
-                      ) : null}
+                      ) : null} */}
                     </td>
                   );
                 })}

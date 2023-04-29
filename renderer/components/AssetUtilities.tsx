@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { HorizontalLine } from "./HorizontalLine";
 
-export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, handleSaved }) => {
+export const AssetUtilities = ({
+  asset,
+  imageData,
+  tabIndex,
+  handleSave,
+  handleChanged,
+  handleSaved,
+  setTabs,
+  allTabs,
+  tabGroupIndex,
+}) => {
   const [name, setName] = useState("");
   const [source, setSource] = useState("");
   const [notes, setNotes] = useState("");
@@ -14,9 +24,51 @@ export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, hand
     setType(asset?.body?.type);
   }, [asset]);
 
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.keyCode === 83) {
+      const data = {
+        name,
+        source,
+        notes,
+        type,
+      };
+      handleSave(data);
+    }
+  };
+
+  const handleName = (e) => {
+    setName(e.target.value);
+    const temp = [...allTabs]
+    const replace = temp[tabGroupIndex][tabIndex]
+    replace.meta.body.name = e.target.value
+    setTabs(temp)
+    handleChanged(tabIndex);
+  }
+
+  const handleSource = (e) => {
+    setSource(e.target.value);
+    const temp = [...allTabs]
+    const replace = temp[tabGroupIndex][tabIndex]
+    replace.meta.body.source = e.target.value
+    setTabs(temp)
+    handleChanged(tabIndex);
+  }
+
+  const handleNotes = (e) => {
+    setNotes(e.target.value);
+    const temp = [...allTabs]
+    const replace = temp[tabGroupIndex][tabIndex]
+    replace.meta.body.notes = e.target.value
+    setTabs(temp)
+    handleChanged(tabIndex);
+  }
+
   return (
     <div
-      className={`rounded-r-md border border-lightgreen h-full w-full overflow-hidden flex flex-col`}>
+      className={`rounded-r-md border border-lightgreen h-full w-full overflow-hidden flex flex-col`}
+      onKeyDown={(e) => {
+        handleKeyDown(e);
+      }} tabIndex={1}>
       <div className="flex justify-between">
         <div className="p-2 text-center truncate">Properties</div>
         <div className="p-2 flex space-x-3">
@@ -37,27 +89,27 @@ export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, hand
       </div>
       <HorizontalLine />
       <div className="p-2 space-y-2 h-full w-full overflow-y-auto customScroll">
-        {imageData && (
-          <img
-            className="border border-lightgreen max-h-[50vh] w-full"
-            src={`data:image/png;base64,${Buffer.from(imageData).toString(
-              "base64"
-            )}`}
-            alt={name}
-          />
+        {type?.includes("image") ? null : (
+          <>
+            {imageData && (
+              <img
+                className="border border-lightgreen max-h-[50vh] w-full"
+                src={`data:image/png;base64,${Buffer.from(imageData).toString(
+                  "base64"
+                )}`}
+                alt={name}
+              />
+            )}
+          </>
         )}
+
         <div className="font-semibold">
           <input
             className="border border-lightgreen rounded-md w-full p-1"
             type="text"
             value={name}
             onChange={(e) => {
-              setName(e.target.value);
-              if (e.target.value != asset?.body?.name) {
-                handleChanged(tabIndex);
-              } else {
-                handleSaved(tabIndex)
-              }
+              handleName(e)
             }}
             placeholder="Name"
           />
@@ -69,7 +121,7 @@ export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, hand
             value={source}
             placeholder="Source (Optional)"
             onChange={(e) => {
-              setSource(e.target.value);
+              handleSource(e)
             }}
           />
         </div>
@@ -79,13 +131,15 @@ export const AssetUtilities = ({ asset, imageData, tabIndex, handleChanged, hand
             value={notes}
             placeholder="Notes (Optional)"
             onChange={(e) => {
-              setNotes(e.target.value);
+              handleNotes(e)
             }}
           />
         </div>
         <div></div>
         <HorizontalLine />
-        <div>Type:<span className="italic">{type}</span></div>
+        <div>
+          Type:<span className="italic">{type}</span>
+        </div>
       </div>
     </div>
   );

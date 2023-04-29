@@ -1,38 +1,44 @@
-import { UserType } from './userType';
-import { PermissionType } from './permissionType';
+import { UserType } from "./userType";
+import { PermissionType } from "./permissionType";
 
 export interface AssetType {
-    id: string;
-    file: string;
-    name: string;
-    type: string;
-    heroImage: string;
-    source: string;
-    status: boolean;
-    lastModified: string;
+  id: string;
+  file: string;
+  fileData: Buffer;
+  heroImage: Buffer;
+  meta: AssetMetaType;
 }
 
-export interface AssetTypeExtended extends AssetType {
-    notes: string | null;
-    addedBy: string;
-    createdAt: string;
-    user: UserType;
-    assetFolderId: string | null;
-    collections: any[];
-    userPermissions: PermissionType[]
-    heroImage: string;
+interface AssetMetaType {
+  body: AssetBodyType;
+  name: string;
+  type: string;
+  version: string;
+}
+
+interface AssetBodyType {
+  id: string;
+  createdAt: string;
+  lastModified: string;
+  name: string;
+  notes: string;
+  source: string;
+  type: string;
+}
+
+//Asset format inside Collection Content
+interface AssetContentType {
+  id: string;
+  file: string;
+  heroImage: string;
+  createdAt: string;
+  lastModified: string;
+  name: string;
+  notes: string;
+  source: string;
+  type: string;
 }
 
 export interface AssetTypeCell extends AssetType {
     isFrozen: boolean;
-}
-
-export interface AssetFolderType {
-    id: string;
-    name: string;
-    assets: [{
-        id: string;
-        assetId: string;
-        asset: AssetTypeExtended;
-    }];
 }

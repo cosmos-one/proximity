@@ -19,6 +19,20 @@ a {
   text-decoration: none;
 }
 
+ul {
+  list-style-type: disc;
+  color: #00ff00;
+}
+
+ul::marker {
+  color: #00ff00;
+}
+
+li::marker {
+  color: #00ff00;
+}
+
+
 * {
   box-sizing: border-box;
 }

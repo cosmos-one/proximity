@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, createElement, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { micromark } from "micromark";
-import { ipcRenderer } from "electron";
+import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 interface EditorProps {
   file: { title: string; content: string };
@@ -10,60 +10,44 @@ interface EditorProps {
   dir: string;
 }
 
-export const Editor = ({ file, index, handleChanged, handleSaved, dir }: EditorProps) => {
-  const [inputs, setInputs] = useState<{ title?: string; body?: string }>();
-  const [saving, setSaving] = useState<boolean>(false);
-  const [content, setContent] = useState<string>();
+export const Editor = ({
+  file,
+  index,
+  handleChanged,
+  handleSaved,
+  dir,
+}: EditorProps) => {
+  const [content, setContent] = useState<string>("");
 
   useEffect(() => {
-    setContent(micromark(file.content));
-    const object = {
-      title: file.title,
-      body: micromark(file.content),
-    };
-    setInputs(object);
+    const newContent = findTag(micromark(file.content))
+    setContent(newContent);
   }, [file]);
 
-  const handleInputs = (e: React.FormEvent<HTMLDivElement>, name: string) => {
-    handleChanged(index);
-    setInputs((prevState) => ({ ...prevState, [name]: e.currentTarget.innerHTML }));
-  };
+  const findTag = (content) => {
+    const newContent = content.replace(
+      /(^|\s)(#\w+)\b/g,
+      `$1<span class="bg-hlgreen rounded-md px-1">$2</span> `
+    );
+    return newContent
+  }
 
-  // const handleHotkeys = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  //     // Save markdown
-  //     if (e.altKey && e.keyCode === 83) {
-  //         // setSaving(true)
-  //         ipcRenderer.send("recipe", {req: "POST", name: recipe.id.replace(/\.md$/, ''), path: currentDirectory, title: inputs.title, body: inputs.body})
-  //         ipcRenderer.on("update-md", (e, message) => {
-  //             updateRecipe(index, message)
-  //             setSaving(false)
-  //             handleSaved(index)
-  //         })
-  //     }
-  // }
+  const handleInput = (e: ContentEditableEvent) => {
+    const editedContent = findTag(e.target.value);
+    setContent(editedContent);
+  };
 
   return (
     <div
       className="p-2 h-full w-full overflow-hidden opacity-90 border border-lightgreen rounded-md"
       tabIndex={0}>
       <div className="flex justify-center w-full h-full overflow-y-auto customScroll min-w-[300px] p-5">
-        <div className="space-y-5">
-          <div>
-            <div
-              className="prose text-sm focus:outline-none leading-snug prose-hr:border-none prose-hr:my-1 text-green prose-headings:text-green prose-headings:text-2xl prose-p:mb-5 prose-a:text-green"
-              contentEditable={true}
-              dangerouslySetInnerHTML={{
-                __html: content || "",
-              }}
-              onInput={(e) => {
-                handleInputs(e, "body");
-              }}></div>
-          </div>
-          {saving ? (
-            <div className="absolute right-10 top-5 bg-pink-700 rounded p-2 animate-pulse">
-              Saving
-            </div>
-          ) : null}
+        <div className="space-y-5 max-w-[600px]">
+          <ContentEditable
+            className="text-base text-green focus:outline-none prose-none prose-li:list-outside prose-li:ml-5 prose-h1:text-4xl prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-p:whitespace-normal"
+            html={content}
+            onChange={handleInput}
+          />
         </div>
       </div>
     </div>
