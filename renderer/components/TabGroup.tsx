@@ -14,7 +14,6 @@ import { Welcome } from "./Welcome";
 import { BsCircleFill } from "react-icons/bs";
 import { FileIcon } from "./FileIcon";
 
-
 export const TabGroup = ({
   dir,
   active,
@@ -88,25 +87,18 @@ export const TabGroup = ({
                                 onClick={(e) => {
                                   handleActiveTab(i, index);
                                 }}>
-                                  <div>
-                                    <FileIcon fileType={path.extname(tab.id)}/>
-                                  </div>
-                                <div className="ml-2 truncate">{tab.id.replace(/\.[^.]*$/, "")}</div>
-                                <div className="ml-2 truncate">
-                                  {" "}
-                                  {tab.id.includes(".pcol") ? (
-                                    <span className="border-lightgreen border rounded-md px-1">
-                                      collection
-                                    </span>
-                                  ) : tab.id.includes(".pas") ? (
-                                    <span className="border-lightgreen border rounded-md px-1">
-                                      asset
-                                    </span>
-                                  ) : null}
+                                <div>
+                                  <FileIcon fileType={path.extname(tab.id)} />
                                 </div>
+                                <div className="ml-2 truncate">
+                                  {tab.id.replace(/\.[^.]*$/, "")}
+                                </div>
+
                                 {changed[i] ? (
                                   <>
-                                    <span className="ml-2"><BsCircleFill className="h-2 w-2"/></span>
+                                    <span className="ml-2">
+                                      <BsCircleFill className="h-2 w-2" />
+                                    </span>
                                     <Tooltip
                                       tooltip={"Close (⌥W)"}
                                       position={"translate-y-10 translate-x-4"}>

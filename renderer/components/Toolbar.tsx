@@ -1,9 +1,6 @@
-import Link from "next/link";
 import { Tooltip } from "./Tooltip";
-import { BsCassette, BsGrid3X3Gap } from "react-icons/bs";
 import { CiGrid41 } from "react-icons/ci";
-import { HorizontalLine } from "./HorizontalLine";
-import { GiMeshNetwork, GiBlackBook } from "react-icons/gi";
+import { GiBlackBook } from "react-icons/gi";
 
 interface ToolBarProps {
   handleActiveTool: (tool: number) => void;
@@ -57,7 +54,6 @@ export const Toolbar: React.FC<ToolBarProps> = ({
               }
             }}>
             <CiGrid41 className="w-8 h-8" />
-            
           </div>
         </Tooltip>
         <Tooltip tooltip={"Assets"} position={"translate-x-11"}>
@@ -71,15 +67,7 @@ export const Toolbar: React.FC<ToolBarProps> = ({
                 handlePanelToggle();
               }
             }}>
-              <GiBlackBook className="w-8 h-8"/>
-            
-          </div>
-        </Tooltip>
-        <HorizontalLine />
-        <Tooltip tooltip={"Network"} position={"translate-x-11"}>
-          <div
-            className={`hover:opacity-100 hover:cursor-pointer opacity-30`}>
-            <GiMeshNetwork className="w-8 h-8"/>
+            <GiBlackBook className="w-8 h-8" />
           </div>
         </Tooltip>
       </div>

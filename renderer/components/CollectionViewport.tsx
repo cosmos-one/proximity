@@ -61,7 +61,7 @@ export const CollectionViewport = ({
                     <td
                     key={index}
                       tabIndex={1}
-                      className={`p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
+                      className={`hover:border-red hover:border-2 p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
                       style={{
                         width: `${cellWidth}vh`,
                         height: `${cellHeight}vh`,

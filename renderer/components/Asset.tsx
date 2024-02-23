@@ -20,7 +20,7 @@ export const Asset = ({
   allTabs,
   tabGroupIndex,
   refresh,
-  updateTab
+  updateTab,
 }) => {
   const [assetUtilities, setAssetUtilities] = useState(true);
   const [asset, setAsset] = useState({});
@@ -48,20 +48,24 @@ export const Asset = ({
       })
       .then((res) => {
         handleSaved(tabIndex);
-        updateTab(tabIndex, res)
+        updateTab(tabIndex, res);
         refresh();
       });
-    toast.promise(update, {
-      loading: "Saving...",
-      success: "Saved!",
-      error: "Error saving.",
-    }, {
-      style: {
-        background: "#000000",
-        border: "1px solid #00ff00",
-        color: "#00ff00",
+    toast.promise(
+      update,
+      {
+        loading: "Saving...",
+        success: "Saved!",
+        error: "Error saving.",
       },
-    });
+      {
+        style: {
+          background: "#000000",
+          border: "1px solid #00ff00",
+          color: "#00ff00",
+        },
+      }
+    );
   };
 
   return (
@@ -118,7 +122,6 @@ export const Asset = ({
             tabIndex={tabIndex}
             handleSave={handleSave}
             handleChanged={handleChanged}
-            handleSaved={handleSaved}
             setTabs={setTabs}
             allTabs={allTabs}
             tabGroupIndex={tabGroupIndex}

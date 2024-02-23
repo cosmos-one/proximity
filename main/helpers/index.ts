@@ -1,15 +1,15 @@
 import createWindow from './create-window';
-import openDirectory from './openDirectory';
-import { readRecentDirectories, writeRecentDirectories } from './recentDirectory';
-import createMarkdown from './createMarkdown';
-import readMarkdown from './readMarkdown';
-import createAssets from './createAssets';
-import readAsset from './readAsset';
-import updateAsset from './updateAsset';
-import readAllAssetPaths from './readAllAssetPaths';
-import readBatchAssets from './readBatchAssets';
-import createCollection from './createCollection';
-import readCollection from './readCollection';
+import openDirectory from './open-directory';
+import { readRecentDirectories, writeRecentDirectories } from './get-recent-directory';
+import createMarkdown from './create-markdown';
+import readMarkdown from './read-markdown';
+import createAssets from './create-assets';
+import readAsset from './read-assets';
+import updateAsset from './update-asset';
+import readAllAssetPaths from './read-all-asset-paths';
+import readBatchAssets from './read-batch-assets';
+import createCollection from './create-collection';
+import readCollection from './read-collection';
 
 export {
   createWindow,

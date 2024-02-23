@@ -100,7 +100,10 @@ function Home() {
       if (
         tabs[activeTabGroup].filter((tab) => tab.id === fileName).length > 0
       ) {
-        return;
+        let newActiveTabIndex = tabs[activeTabGroup].findIndex((tab) => tab.id === fileName)
+        const updateActiveTab = [...activeTab]
+        updateActiveTab[activeTabGroup] = newActiveTabIndex
+        setActiveTab(updateActiveTab)
       } else {
         const update = [...tabs];
         if (fileName.includes(".md")) {
@@ -211,6 +214,7 @@ function Home() {
             handleRefresh();
           }}
           refreshing={refreshing}
+          handleOpenNewDirectory={() => {handleOpenNewDirectory()}}
         />
         <div className="h-full w-full flex overflow-hidden">
           <Toolbar

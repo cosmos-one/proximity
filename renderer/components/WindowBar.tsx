@@ -3,7 +3,12 @@ import { Tooltip } from "./Tooltip";
 import { InfoModal } from "./InfoModal";
 import { RingLoader } from "react-spinners";
 
-export const WindowBar = ({ dir, refresh, refreshing }) => {
+export const WindowBar = ({
+  dir,
+  refresh,
+  refreshing,
+  handleOpenNewDirectory,
+}) => {
   const [infoModal, setInfoModal] = useState(false);
   return (
     <div className="h-[40px] min-h-[40px] drag flex flex-none items-center justify-between p-2 space-x-3">
@@ -27,9 +32,29 @@ export const WindowBar = ({ dir, refresh, refreshing }) => {
           </div>
           <div>{dir}</div>
         </div>
-        {/* <input type="text" className="border border-lightgreen w-full rounded-md"/> */}
       </div>
       <div className="flex items-center space-x-2">
+        <Tooltip
+          tooltip={"Open New Folder"}
+          position={"translate-y-10 -translate-x-10"}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1}
+            stroke="currentColor"
+            className="w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer"
+            onClick={() => {
+              handleOpenNewDirectory();
+            }}>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"
+            />
+          </svg>
+        </Tooltip>
+
         {dir ? (
           refreshing ? (
             <svg

@@ -79,40 +79,6 @@ ipcMain.handle("open-directory", (event, dir) => {
   return data;
 });
 
-//Markdown
-ipcMain.handle("markdown", async (event, message) => {
-  if (!message.req) {
-    return;
-  }
-  //Get data for a single markdown
-  else if (message.req === "GET") {
-    let md = await readMarkdown(message.path);
-    return md;
-  } else if (message.req === "POST") {
-    //Save markdown
-    let md = await createMarkdown(
-      message.name,
-      message.path,
-      message.title,
-      message.body
-    );
-    return md;
-  }
-});
-
-//Collections
-ipcMain.handle("collection", async (event, message) => {
-  if (!message.req) {
-    return;
-  } else if (message.req === "GET") {
-    let col = await readCollection(message.path);
-    return col;
-  } else if (message.req === "POST") {
-    let col = await createCollection(message.path, message.name);
-    return col;
-  }
-});
-
 //Assets
 ipcMain.handle("asset", async (event, message) => {
   if (!message.req) {
@@ -142,3 +108,41 @@ ipcMain.handle("assets", async (event, message) => {
     return assets;
   }
 });
+
+//Collections
+ipcMain.handle("collection", async (event, message) => {
+  if (!message.req) {
+    return;
+  } else if (message.req === "GET") {
+    let col = await readCollection(message.path);
+    return col;
+  } else if (message.req === "POST") {
+    let col = await createCollection(message.path, message.name);
+    return col;
+  }
+});
+
+//Markdown
+ipcMain.handle("markdown", async (event, message) => {
+  if (!message.req) {
+    return;
+  }
+  //Get data for a single markdown
+  else if (message.req === "GET") {
+    let md = await readMarkdown(message.path);
+    return md;
+  } else if (message.req === "POST") {
+    //Save markdown
+    let md = await createMarkdown(
+      message.name,
+      message.path,
+      message.title,
+      message.body
+    );
+    return md;
+  }
+});
+
+
+
+

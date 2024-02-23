@@ -29,7 +29,7 @@ export default async function createAssets(
       // If filePath is an image, resize it
       if (asset.type.includes("image")) {
         const imageBuffer = await sharp(asset.filePath)
-          .resize({ width: 720 })
+          .resize({ width: 1280 })
           .png()
           .toBuffer();
         archive.append(imageBuffer, { name: "heroImage.png" });
@@ -67,12 +67,13 @@ export default async function createAssets(
       const body = {
         id: cuid(),
         name: asset.name,
-        source: asset.source,
-        notes: asset.notes,
+        source: asset.source || "",
+        notes: asset.notes || "",
         type: asset.type,
         createdAt: new Date().toISOString(),
         lastModified: new Date().toISOString(),
       };
+      
       const assetFile = {
         type: "asset",
         name: "proximity-native",

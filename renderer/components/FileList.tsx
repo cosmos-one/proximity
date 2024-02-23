@@ -52,13 +52,7 @@ export const FileList = ({
             key={fullPath}
             className="truncate rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer">
             <Dropdown title={fullPath} titleBold={false}>
-              <li>
-                {
-                  <ul className="pl-3">
-                    {renderTree(tree[directory], fullPath)}
-                  </ul>
-                }
-              </li>
+              <li>{renderTree(tree[directory], fullPath)}</li>
             </Dropdown>
           </li>
         );
@@ -68,7 +62,7 @@ export const FileList = ({
         return (
           <li
             key={fullPath}
-            className="rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen p-1 w-full flex items-center space-x-2"
+            className="rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen w-full flex items-center space-x-1"
             onClick={() => {
               handleNewTab(fullPath);
             }}>
