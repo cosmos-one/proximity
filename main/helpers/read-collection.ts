@@ -9,6 +9,6 @@ export default async function readCollection(slug) {
     return {
         id,
         file: id,
-        data: JSON.parse(fileContents)
+        meta: JSON.parse(fileContents)
     };
 }

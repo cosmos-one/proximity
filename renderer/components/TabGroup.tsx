@@ -218,7 +218,19 @@ export const TabGroup = ({
                           ) : tab.id.includes(".pdf") ? (
                             <PDF file={tab} />
                           ) : tab.id.includes(".pcol") ? (
-                            <Collection file={tab} dir={dir} />
+                            <Collection
+                              file={tab}
+                              dir={dir}
+                              tabIndex={index}
+                              handleChanged={handleChanged}
+                              handleSaved={handleSaved}
+                              unsaved={changed[index]}
+                              setTabs={setTabs}
+                              allTabs={allTabs}
+                              tabGroupIndex={tabGroupIndex}
+                              refresh={refresh}
+                              updateTab={updateTab}
+                            />
                           ) : tab.id.includes(".pas") ? (
                             <Asset
                               file={tab}

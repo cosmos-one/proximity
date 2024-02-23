@@ -13,6 +13,7 @@ import {
   readAllAssetPaths,
   createCollection,
   readCollection,
+  updateCollection
 } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -90,8 +91,14 @@ ipcMain.handle("asset", async (event, message) => {
     let asset = await createAssets(message.path, message.data);
     return asset;
   } else if (message.req === "PATCH") {
-    let asset = await updateAsset(message.path, message.original, message.update, message.fileData, message.imageData);
-    return asset
+    let asset = await updateAsset(
+      message.path,
+      message.original,
+      message.update,
+      message.fileData,
+      message.imageData
+    );
+    return asset;
   }
 });
 
@@ -119,6 +126,9 @@ ipcMain.handle("collection", async (event, message) => {
   } else if (message.req === "POST") {
     let col = await createCollection(message.path, message.name);
     return col;
+  } else if (message.req === "PATCH") {
+    let col = await updateCollection(message.path, message.original, message.collection);
+    return col;
   }
 });
 
@@ -142,7 +152,3 @@ ipcMain.handle("markdown", async (event, message) => {
     return md;
   }
 });
-
-
-
-

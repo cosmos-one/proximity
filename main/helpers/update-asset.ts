@@ -1,9 +1,6 @@
 import fs from "fs";
 import path from "path";
 import archiver from "archiver";
-import sharp from "sharp";
-import https from "https";
-import cuid from "cuid";
 import * as Types from "@/types";
 
 type AssetCreateType = {
@@ -45,10 +42,12 @@ export default async function updateAsset(
     name: "meta.json",
   });
   archive.pipe(output);
-  await archive.finalize()
-  .then(() => {
-    fs.renameSync(fullPath, path.join(path.dirname(fullPath), asset.name + ".pas"))
-  })
+  await archive.finalize().then(() => {
+    fs.renameSync(
+      fullPath,
+      path.join(path.dirname(fullPath), asset.name + ".pas")
+    );
+  });
   const res = {
     id: asset.name + ".pas",
     file: asset.name + ".pas",

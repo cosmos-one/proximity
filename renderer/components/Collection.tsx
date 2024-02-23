@@ -1,19 +1,21 @@
+import path from "path";
+
+//Hooks
 import { useEffect, useState } from "react";
-import Split from "react-split-it";
+import { ipcRenderer } from "electron";
 //Types
 import * as Types from "@/types";
 //Components
+import Split from "react-split-it";
 import { Time } from "./Time";
 import { HorizontalLine } from "./HorizontalLine";
 import { Tooltip } from "./Tooltip";
 import { Slider } from "./Slider";
 import { CollectionViewport } from "./CollectionViewport";
 import { CollectionUtilities } from "./CollectionUtilities";
-import { CollectionFloodModal } from "./CollectionFloodModal";
+import { toast } from "react-hot-toast";
 //Icons
 import { IoExpandOutline } from "react-icons/io5";
-import { MdWaves } from "react-icons/md";
-
 
 interface ActiveCellType {
   cellY: number;
@@ -21,10 +23,23 @@ interface ActiveCellType {
   asset: Types.AssetTypeCell;
 }
 
-export const Collection = ({ file, dir }) => {
+export const Collection = ({
+  file,
+  dir,
+  tabIndex,
+  handleChanged,
+  handleSaved,
+  unsaved,
+  setTabs,
+  allTabs,
+  tabGroupIndex,
+  refresh,
+  updateTab,
+}) => {
   //Collection
   const [collection, setCollection] = useState({});
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [collectionX, setCollectionX] = useState(0);
   const [collectionY, setCollectionY] = useState(0);
   const [cellWidth, setCellWidth] = useState(0);
@@ -48,22 +63,77 @@ export const Collection = ({ file, dir }) => {
   const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
 
   useEffect(() => {
-    setCollection(file.data);
-    setName(file.data.body.name);
-    setCollectionX(file.data.body.collectionX);
-    setCollectionY(file.data.body.collectionY);
-    setContent(file.data.body.content);
-    setLastModified(`${file.data.body.lastModified}`);
+    setCollection(file.meta);
+    setName(file.meta.body.name);
+    setDescription(file.meta.body.description);
+    setCollectionX(file.meta.body.collectionX);
+    setCollectionY(file.meta.body.collectionY);
+    setContent(file.meta.body.content);
+    setLastModified(`${file.meta.body.lastModified}`);
     //Cell Aspect Ratio
-    let width = 100 / Number(file.data.body.collectionX);
+    let width = 100 / Number(file.meta.body.collectionX);
     let height = width / 1.5;
     setCellWidth(width);
     setCellHeight(height);
     //Empty Cells
-    const total = file.data.body.collectionX * file.data.body.collectionY
-    const filled = file.data.body.content.flat().filter((item: any) => item.id).length
-    setEmptyCells(total - filled)
+    const total = file.meta.body.collectionX * file.meta.body.collectionY;
+    const filled = file.meta.body.content
+      .flat()
+      .filter((item: any) => item.id).length;
+    setEmptyCells(total - filled);
   }, [file]);
+
+  console.log("colelction", collection);
+
+  const handleSave = () => {
+    const fullPath = path.join(dir, file.file);
+    const update = ipcRenderer
+      .invoke("collection", {
+        req: "PATCH",
+        path: fullPath,
+        collection: { name, description, collectionX, collectionY, content },
+        original: collection,
+      })
+      .then((res) => {
+        handleSaved(tabIndex);
+        updateTab(tabIndex, res);
+        refresh();
+      });
+    toast.promise(
+      update,
+      {
+        loading: "Saving...",
+        success: "Saved!",
+        error: "Error saving.",
+      },
+      {
+        style: {
+          background: "#000000",
+          border: "1px solid #00ff00",
+          color: "#00ff00",
+        },
+      }
+    );
+  };
+
+  //Collection Metadata
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    const temp = [...allTabs];
+    const replace = temp[tabGroupIndex][tabIndex];
+    replace.meta.body.description = e.target.value;
+    setTabs(temp);
+    handleChanged(tabIndex);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+    const temp = [...allTabs];
+    const replace = temp[tabGroupIndex][tabIndex];
+    replace.meta.body.description = e.target.value;
+    setTabs(temp);
+    handleChanged(tabIndex);
+  };
 
   const handleCollectionViewportScaleSlider = (scale: number[]) => {
     const newScale = scale[0];
@@ -79,8 +149,8 @@ export const Collection = ({ file, dir }) => {
   };
 
   const updateContent = (content: any[][]) => {
-    setContent(content)
-  }
+    setContent(content);
+  };
 
   return (
     <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
@@ -108,17 +178,6 @@ export const Collection = ({ file, dir }) => {
               />
             </div>
             <div className="flex items-center space-x-2">
-              <Tooltip
-                tooltip="Flood"
-                position={"translate-y-10 -translate-x-10"}>
-                <MdWaves
-                  className={`w-6 h-6 hover:bg-hlgreen rounded-md hover:cursor-pointer`}
-                  onClick={() => {
-                    setCollectionFloodModal(!collectionFloodModal);
-                  }}
-                />
-              </Tooltip>
-              <CollectionFloodModal dir={dir} modal={collectionFloodModal} toggle={() => {setCollectionFloodModal(!collectionFloodModal)}} empty={emptyCells} setEmptyCells={setEmptyCells} content={content} updateContent={updateContent}/>
               <Tooltip
                 tooltip="Reset Viewport"
                 position={"translate-y-10 -translate-x-16"}>
@@ -167,6 +226,11 @@ export const Collection = ({ file, dir }) => {
           <CollectionUtilities
             collection={collection}
             activeCell={activeCell}
+            name={name}
+            description={description}
+            handleNameChange={handleNameChange}
+            handleDescriptionChange={handleDescriptionChange}
+            handleSave={handleSave}
           />
         ) : null}
       </Split>

@@ -16,7 +16,7 @@ export default async function createCollection(
     const file: Types.CollectionFileType = {
       id: `${name}.pcol`,
       file: `${name}.pcol`,
-      data: content,
+      meta: content,
     };
     return file;
   } else {
@@ -51,7 +51,7 @@ export default async function createCollection(
     const file: Types.CollectionFileType = {
       id: `${name}.pcol`,
       file: `${name}.pcol`,
-      data: collectionFile,
+      meta: collectionFile,
     };
     return file;
   }
