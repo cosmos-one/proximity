@@ -9,6 +9,7 @@ import readMarkdown from "./read-markdown";
 import createAssets from "./create-assets";
 import readAsset from "./read-asset";
 import updateAsset from "./update-asset";
+import unzipAsset from "./unzip-asset";
 import readAllAssetPaths from "./read-all-asset-paths";
 import readBatchAssets from "./read-batch-assets";
 import createCollection from "./create-collection";
@@ -25,6 +26,7 @@ export {
   createAssets,
   readAsset,
   updateAsset,
+  unzipAsset,
   readAllAssetPaths,
   readBatchAssets,
   createCollection,

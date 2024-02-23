@@ -10,10 +10,11 @@ import {
   createAssets,
   readAsset,
   updateAsset,
+  unzipAsset,
   readAllAssetPaths,
   createCollection,
   readCollection,
-  updateCollection
+  updateCollection,
 } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -99,6 +100,9 @@ ipcMain.handle("asset", async (event, message) => {
       message.imageData
     );
     return asset;
+  } else if (message.req === "UNZIP") {
+    let asset = await unzipAsset(message.path);
+    return asset;
   }
 });
 
@@ -127,7 +131,11 @@ ipcMain.handle("collection", async (event, message) => {
     let col = await createCollection(message.path, message.name);
     return col;
   } else if (message.req === "PATCH") {
-    let col = await updateCollection(message.path, message.original, message.collection);
+    let col = await updateCollection(
+      message.path,
+      message.original,
+      message.collection
+    );
     return col;
   }
 });

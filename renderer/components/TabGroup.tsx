@@ -215,7 +215,7 @@ export const TabGroup = ({
                             />
                           ) : isImage(tab.id) ? (
                             <Image file={tab} />
-                          ) : tab.id.includes(".pdf") ? (
+                          ) : tab.id.endsWith(".pdf") ? (
                             <PDF file={tab} />
                           ) : tab.id.includes(".pcol") ? (
                             <Collection

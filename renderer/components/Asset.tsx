@@ -67,6 +67,8 @@ export const Asset = ({
       }
     );
   };
+  console.log(assetUtilities)
+  console.log()
 
   return (
     <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
