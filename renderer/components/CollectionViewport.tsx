@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useGesture } from "@use-gesture/react";
+import { ImageViewer } from "./ImageViewer";
 
 export const CollectionViewport = ({
   setCollectionViewport,
@@ -59,25 +60,19 @@ export const CollectionViewport = ({
                 {item?.map((asset, index) => {
                   return (
                     <td
-                    key={index}
+                      key={index}
                       tabIndex={1}
-                      className={`hover:border-red hover:border-2 p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
+                      className={`hover:border-red hover:border-2 hover:cursor-pointer p-0 relative border border-green bg-no-repeat bg-cover focus:border-2 focus:border-blue focus:outline-none duration-150`}
                       style={{
                         width: `${cellWidth}vh`,
                         height: `${cellHeight}vh`,
-                        backgroundImage: `url(${asset.heroImage || asset.file})`,
                       }}
                       onClick={() => {
                         handleCellClick(i, index, asset);
                       }}>
-                      {/* {asset.name ? (
-                        <img
-                          src={asset.file}
-                          className="w-full h-full object-cover"
-                          draggable={false}
-                          alt={asset.name}
-                        />
-                      ) : null} */}
+                      {asset.name ? (
+                        <ImageViewer imageData={asset.heroImage} />
+                      ) : null}
                     </td>
                   );
                 })}

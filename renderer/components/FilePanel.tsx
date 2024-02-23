@@ -55,11 +55,6 @@ export const FilePanel: React.FC<FilePanelProps> = ({
           <div>FINDER</div>
           {loading ? <RingLoader color="#00ff00" size={20} /> : null}
         </div>
-        {dir ? (
-          <div>
-            <NewFileDropdown collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
-          </div>
-        ) : null}
       </div>
       <div className="overflow-y-auto h-full">
         {dir ? (
