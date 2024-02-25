@@ -10,6 +10,7 @@ interface CollectionPanelProps {
   files: string[];
   handleNewTab: (file: string) => void;
   refresh: () => void;
+  setDragging: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const CollectionPanel: React.FC<CollectionPanelProps> = ({
@@ -18,6 +19,7 @@ export const CollectionPanel: React.FC<CollectionPanelProps> = ({
   files,
   handleNewTab,
   refresh,
+  setDragging,
 }) => {
   //Files
   const [fileArchive, setFileArchive] = useState([]);
@@ -58,7 +60,10 @@ export const CollectionPanel: React.FC<CollectionPanelProps> = ({
               viewBox="0 0 24 24"
               strokeWidth={1}
               stroke="currentColor"
-              className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md" onClick={() => {setCollectionCreateInput(!collectionCreateInput)}}>
+              className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md"
+              onClick={() => {
+                setCollectionCreateInput(!collectionCreateInput);
+              }}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -72,6 +77,7 @@ export const CollectionPanel: React.FC<CollectionPanelProps> = ({
         {dir ? (
           <div>
             <FileList
+              setDragging={setDragging}
               refresh={refresh}
               filePaths={fileArchive}
               dir={dir}

@@ -2,7 +2,7 @@
   "private": true,
   "name": "proximity",
   "description": "Desktop app for Proximity",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "author": "Kelvin Chan <kchan@interfacingresearchlaboratory.com>",
   "main": "app/background.js",
   "scripts": {

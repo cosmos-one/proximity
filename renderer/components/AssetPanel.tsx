@@ -10,6 +10,7 @@ interface AssetPanelProps {
   files: string[];
   handleNewTab: (file: string) => void;
   refresh: () => void;
+  setDragging: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AssetPanel: React.FC<AssetPanelProps> = ({
@@ -18,6 +19,7 @@ export const AssetPanel: React.FC<AssetPanelProps> = ({
   files,
   handleNewTab,
   refresh,
+  setDragging,
 }) => {
   //Files
   const [fileArchive, setFileArchive] = useState([]);
@@ -58,14 +60,24 @@ export const AssetPanel: React.FC<AssetPanelProps> = ({
               viewBox="0 0 24 24"
               strokeWidth={1}
               stroke="currentColor"
-              className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md" onClick={() => {setCreateAsset(!createAsset)}}>
+              className="w-6 h-6 hover:cursor-pointer hover:bg-hlgreen rounded-md"
+              onClick={() => {
+                setCreateAsset(!createAsset);
+              }}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            <AssetCreateModal modal={createAsset} toggle={() => {setCreateAsset(!createAsset)}} dir={dir} refresh={refresh}/>
+            <AssetCreateModal
+              modal={createAsset}
+              toggle={() => {
+                setCreateAsset(!createAsset);
+              }}
+              dir={dir}
+              refresh={refresh}
+            />
           </div>
         ) : null}
       </div>
@@ -73,6 +85,7 @@ export const AssetPanel: React.FC<AssetPanelProps> = ({
         {dir ? (
           <div>
             <FileList
+              setDragging={setDragging}
               refresh={refresh}
               filePaths={fileArchive}
               dir={dir}

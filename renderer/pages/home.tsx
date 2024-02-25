@@ -14,7 +14,6 @@ import { TabGroup } from "@/components/TabGroup";
 import { Footer } from "@/components/Footer";
 import { WindowBar } from "@/components/WindowBar";
 import { AssetPanel } from "@/components/AssetPanel";
-import { DndContext } from "@dnd-kit/core";
 
 function Home() {
   //Status
@@ -252,6 +251,7 @@ function Home() {
                     handleNewTab={handleNewTab}
                   />
                   <CollectionPanel
+                    setDragging={setDragging}
                     refresh={() => {
                       handleRefresh();
                     }}
@@ -261,6 +261,7 @@ function Home() {
                     handleNewTab={handleNewTab}
                   />
                   <AssetPanel
+                    setDragging={setDragging}
                     refresh={() => {
                       handleRefresh();
                     }}
