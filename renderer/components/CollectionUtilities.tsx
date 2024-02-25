@@ -23,6 +23,7 @@ export const CollectionUtilities = ({
   description,
   handleNameChange,
   handleDescriptionChange,
+  dir,
 }) => {
   const [activePanel, setActivePanel] = useState(0);
 
@@ -122,6 +123,7 @@ export const CollectionUtilities = ({
       <DynamicCollectionPropertiesPanel
         active={activePanel === 1}
         activeCell={activeCell}
+        dir={dir}
       />
     </div>
   );

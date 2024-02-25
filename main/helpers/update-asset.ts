@@ -34,7 +34,7 @@ export default async function updateAsset(
   };
   const assetFile = {
     type: "asset",
-    name: "proximity-native",
+    name: "proximity",
     version: "0.1.0",
     body: body,
   };

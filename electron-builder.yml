@@ -1,6 +1,6 @@
 appId: com.example.proximity
-productName: Proximity Native
-copyright: Copyright © 2023 Cosmosone Ltd.
+productName: Proximity
+copyright: Copyright © 2023 Interfacing Research Laboratory Ltd.
 directories:
   output: dist
   buildResources: resources

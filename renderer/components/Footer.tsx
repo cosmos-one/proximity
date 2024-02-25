@@ -11,7 +11,7 @@ export const Footer = ({ refreshing }) => {
         ) : null}
       </div>
       <div className="space-x-2">
-        <span>Proximity Native v.0.1.0-beta</span>
+        <span>Proximity v.0.1.0</span>
       </div>
     </div>
   );

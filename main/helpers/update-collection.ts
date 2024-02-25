@@ -18,7 +18,7 @@ export default async function updateCollection(
   };
   const collectionFile = {
     type: "collection",
-    name: "proximity-native",
+    name: "proximity",
     version: "0.1.0",
     body: body,
   };

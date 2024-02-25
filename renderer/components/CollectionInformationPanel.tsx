@@ -13,21 +13,11 @@ export const CollectionInformationPanel = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleKeyDown = (e) => {
-    if (e.ctrlKey && e.keyCode === 83) {
-      handleSave();
-    }
-  };
-
   return (
     <div
       className={`p-2 ${
         active ? "block" : "hidden"
-      } space-y-2 overflow-y-auto customScroll`}
-      onKeyDown={(e) => {
-        handleKeyDown(e);
-      }}
-      tabIndex={1}>
+      } space-y-2 flex flex-col w-full h-full`}>
       {loading ? (
         <div className="w-full h-full flex items-center justify-center">
           <RingLoader color="#00ff00" size={40} />
@@ -36,7 +26,7 @@ export const CollectionInformationPanel = ({
         <>
           <div className="font-semibold">
             <input
-              className="border border-lightgreen rounded-md w-full p-1"
+              className="w-full p-1"
               type="text"
               value={name}
               onChange={(e) => {
@@ -45,14 +35,15 @@ export const CollectionInformationPanel = ({
               placeholder="Name"
             />
           </div>
-          <div>
+          <HorizontalLine />
+          <div className="w-full h-full overflow-y-auto customScroll">
             <textarea
               placeholder="Description"
               value={description}
               onChange={(e) => {
                 handleDescriptionChange(e);
               }}
-              className="w-full h-full border border-lightgreen bg-black resize-none min-h-[300px] rounded-md focus:outline-none p-1"
+              className="w-full h-full bg-black resize-none min-h-[300px]  focus:outline-none p-1"
             />
           </div>
           <HorizontalLine />

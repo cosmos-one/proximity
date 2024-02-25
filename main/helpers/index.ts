@@ -11,10 +11,10 @@ import readAsset from "./read-asset";
 import updateAsset from "./update-asset";
 import unzipAsset from "./unzip-asset";
 import readAllAssetPaths from "./read-all-asset-paths";
-import readBatchAssets from "./read-batch-assets";
 import createCollection from "./create-collection";
 import readCollection from "./read-collection";
 import updateCollection from "./update-collection";
+import readCollectionViewport from "./read-collection-viewport";
 
 export {
   createWindow,
@@ -28,8 +28,8 @@ export {
   updateAsset,
   unzipAsset,
   readAllAssetPaths,
-  readBatchAssets,
   createCollection,
   readCollection,
   updateCollection,
+  readCollectionViewport
 };

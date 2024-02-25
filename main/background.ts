@@ -1,3 +1,4 @@
+import path from "path";
 import { app, ipcMain, dialog } from "electron";
 import serve from "electron-serve";
 import {
@@ -15,6 +16,7 @@ import {
   createCollection,
   readCollection,
   updateCollection,
+  readCollectionViewport
 } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -41,6 +43,7 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`);
     // mainWindow.webContents.openDevTools();
   }
+
 })();
 
 app.on("window-all-closed", () => {
@@ -139,6 +142,25 @@ ipcMain.handle("collection", async (event, message) => {
     return col;
   }
 });
+
+ipcMain.handle("collection-viewport", async (event, message) => {
+  if (!message.req) {
+    return;
+  } else if (message.req === "GET") {
+    let view = await readCollectionViewport(message.dir, message.content);
+    return view
+  }
+})
+
+ipcMain.handle("collection-asset", async (event, message) => {
+  if (!message.req) {
+    return;
+  } else if (message.req === "GET") {
+    const fullAssetPath = path.join(message.dir, message.path);
+    let view = await readAsset(fullAssetPath);
+    return view
+  }
+})
 
 //Markdown
 ipcMain.handle("markdown", async (event, message) => {

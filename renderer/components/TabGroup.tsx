@@ -31,6 +31,8 @@ export const TabGroup = ({
   tabGroupIndex,
   refresh,
   updateTab,
+  dragging,
+  setDragging
 }) => {
   const [changed, setChanged] = useState([]);
 
@@ -230,6 +232,8 @@ export const TabGroup = ({
                               tabGroupIndex={tabGroupIndex}
                               refresh={refresh}
                               updateTab={updateTab}
+                              dragging={dragging}
+                              setDragging={setDragging}
                             />
                           ) : tab.id.includes(".pas") ? (
                             <Asset

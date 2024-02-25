@@ -28,15 +28,8 @@ interface AssetBodyType {
 
 //Asset format inside Collection Content
 interface AssetContentType {
-  id: string;
-  file: string;
-  heroImage: string;
-  createdAt: string;
-  lastModified: string;
-  name: string;
-  notes: string;
-  source: string;
-  type: string;
+  path: string;
+  data: AssetType
 }
 
 export interface AssetTypeCell extends AssetType {

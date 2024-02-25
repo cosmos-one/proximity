@@ -5,6 +5,8 @@ import { Time } from "./Time";
 import toast from "react-hot-toast";
 import { RingLoader } from "react-spinners";
 import { ImageViewer } from "./ImageViewer";
+import { ipcRenderer } from "electron";
+import { HorizontalLine } from "./HorizontalLine";
 
 interface ActiveCellType {
   cellY: number;
@@ -15,30 +17,30 @@ interface ActiveCellType {
 type PropertiesPanelProps = {
   active: boolean;
   activeCell: ActiveCellType | null;
+  dir: string;
 };
 
 export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
   active,
   activeCell,
+  dir,
 }) => {
-  const [asset, setAsset] = useState<Types.AssetContentType | null>(null);
+  const [asset, setAsset] = useState<Types.AssetType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [imageLink, setImageLink] = useState<boolean>(false);
 
   useEffect(() => {
-    if (activeCell) {
+    if (activeCell?.asset.path) {
       setLoading(true);
-      setAsset(activeCell.asset);
       setLoading(false);
-      if (activeCell.asset.heroImage) {
-        if (activeCell.asset.heroImage[0] === "h") {
-          setImageLink(true);
-        }
-      } else if (activeCell.asset.file) {
-        if (activeCell.asset.file[0] === "h") {
-          setImageLink(true);
-        }
-      }
+      ipcRenderer
+        .invoke("collection-asset", {
+          req: "GET",
+          dir,
+          path: activeCell.asset.path,
+        })
+        .then((res) => {
+          setAsset(res);
+        });
     }
   }, [activeCell]);
 
@@ -51,59 +53,28 @@ export const CollectionPropertiesPanel: React.FC<PropertiesPanelProps> = ({
         <>
           <div
             className={`flex justify-center ${
-              asset?.file ? null : "border border-lightgreen"
+              asset?.heroImage ? null : "border border-lightgreen"
             }`}>
-            {asset?.file ? (
-              <a href={asset?.file} target="_blank" rel="noreferrer">
-                {imageLink ? (
-                  <img
-                    className={`max-h-[80vh] border border-lightgreen`}
-                    src={activeCell?.asset.heroImage || activeCell?.asset.file}
-                  />
-                ) : (
-                  <ImageViewer
-                    imageData={Buffer.from(activeCell?.asset.heroImage)}
-                  />
-                )}
-              </a>
+            {asset?.heroImage ? (
+              <ImageViewer imageData={Buffer.from(asset?.heroImage)} />
             ) : (
               <div className="flex items-center justify-center opacity-50 w-full h-[200px]">
                 Click on a cell to view its properties
               </div>
             )}
           </div>
-          <div className="p-2 space-y-2 w-full">
-            <div className={`font-bold`}>{asset?.name}</div>
-            {asset?.file && asset?.file[0] === "h" ? (
-              <a
-                href={asset?.file}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center space-x-2">
-                <div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-                    />
-                  </svg>
-                </div>
-                <div className="truncate">{asset?.file}</div>
-              </a>
-            ) : null}
-            <div className={`truncate italic`}>{asset?.source}</div>
-            <div>{asset?.notes}</div>
+          <HorizontalLine/>
+          <div className=" space-y-2 w-full">
+            <div className={`font-bold`}>{asset?.meta.body.name}</div>
+            <HorizontalLine/>
+            <div className={`truncate italic ${asset?.meta.body.source ? "" : "opacity-50"}`}>{asset?.meta.body.source || "Source"}</div>
+            <HorizontalLine/>
+            <div className={`${asset?.meta.body.notes ? "" : "opacity-50"}`}>{asset?.meta.body.notes || "Notes"}</div>
+            <HorizontalLine/>
             <div>
-              {asset?.lastModified ? (
+              {asset?.meta.body.lastModified ? (
                 <>
-                  <Time dateString={asset?.lastModified!} />{" "}
+                  <Time dateString={asset?.meta.body.lastModified!} />{" "}
                   <span className="opacity-50">(Last Modified)</span>
                 </>
               ) : null}

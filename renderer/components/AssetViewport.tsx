@@ -11,7 +11,7 @@ export const AssetViewport = ({ asset, heroImage=undefined, fileData }) => {
 
   return (
     <div className="h-full w-full">
-      {type?.includes("pdf") ? <PDFViewer pdfData={fileData} /> :  <ImageViewer imageData={heroImage} />}
+      {type?.includes("pdf") ? <PDFViewer pdfData={fileData} /> :  <ImageViewer imageData={fileData} contain/>}
     </div>
   );
 };

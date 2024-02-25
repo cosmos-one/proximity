@@ -22,26 +22,26 @@ export default async function createCollection(
   } else {
     const filePath = path.join(directory, name + ".pcol");
     let columns = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       columns.push({});
     }
     let content = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       content.push(columns);
     }
     const body = {
       id: cuid(),
       name: name,
       description: "",
-      collectionX: 10,
-      collectionY: 5,
+      collectionX: 15,
+      collectionY: 10,
       content: content,
       createdAt: new Date().toISOString(),
       lastModified: new Date().toISOString(),
     };
     const collectionFile = {
       type: "collection",
-      name: "proximity-native",
+      name: "proximity",
       version: "0.1.0",
       body: body,
     };

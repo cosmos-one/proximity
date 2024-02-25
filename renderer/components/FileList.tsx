@@ -11,6 +11,7 @@ export const FileList = ({
   handleNewTab,
   collectionCreateInput = undefined,
   collectionCreateInputToggle = undefined,
+  setDragging
 }) => {
   const directoryTree = filePaths.reduce((tree, filePath) => {
     const parts = filePath.split(path.sep);
@@ -52,7 +53,9 @@ export const FileList = ({
             key={fullPath}
             className="truncate rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer">
             <Dropdown title={fullPath} titleBold={false}>
-              <li>{renderTree(tree[directory], fullPath)}</li>
+              <li className="list-none">
+                {renderTree(tree[directory], fullPath)}
+              </li>
             </Dropdown>
           </li>
         );
@@ -62,10 +65,11 @@ export const FileList = ({
         return (
           <li
             key={fullPath}
-            className="rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen w-full flex items-center space-x-1"
+            draggable
+            className="rounded-md whitespace-nowrap scrollBarHide hover:cursor-pointer hover:bg-hlgreen w-full flex items-center space-x-1 py-1"
             onClick={() => {
               handleNewTab(fullPath);
-            }}>
+            }} onDrag={() => {setDragging(fullPath)}}>
             <div>
               <FileIcon fileType={path.extname(fullPath)} />
             </div>

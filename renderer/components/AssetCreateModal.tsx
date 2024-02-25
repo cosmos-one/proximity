@@ -30,8 +30,6 @@ export const AssetCreateModal: React.FC<AssetCreateModalProps> = ({
   const [previews, setPreviews] = useState<PreviewAsset[]>([]);
   const [isUrlInvalid, setIsUrlInvalid] = useState<boolean>(true);
   const [sourceLink, setSourceLink] = useState<string>("");
-  const [folders, setFolders] = useState<any[]>([]);
-  const [focusFolder, setFocusFolder] = useState<string>("");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -41,7 +39,7 @@ export const AssetCreateModal: React.FC<AssetCreateModalProps> = ({
         prevPreviews.concat([
           {
             filePath: file.path,
-            name: file.name,
+            name: file.name.substring(0, file.name.lastIndexOf(".")),
             type: file.type,
             source: "",
             notes: "",
@@ -123,16 +121,18 @@ export const AssetCreateModal: React.FC<AssetCreateModalProps> = ({
       return;
     } else {
       try {
-        const createAssets = ipcRenderer.invoke("asset", {
-          req: "POST",
-          path: dir,
-          data: previews,
-        }).then(() => {
-          setPreviews([]);
-          setSourceLink("");
-          refresh();
-          toggle();
-        })
+        const createAssets = ipcRenderer
+          .invoke("asset", {
+            req: "POST",
+            path: dir,
+            data: previews,
+          })
+          .then(() => {
+            setPreviews([]);
+            setSourceLink("");
+            refresh();
+            toggle();
+          });
         toast.promise(
           createAssets,
           {

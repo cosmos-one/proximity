@@ -35,6 +35,8 @@ export const Collection = ({
   tabGroupIndex,
   refresh,
   updateTab,
+  dragging,
+  setDragging,
 }) => {
   //Collection
   const [collection, setCollection] = useState({});
@@ -46,10 +48,7 @@ export const Collection = ({
   const [cellHeight, setCellHeight] = useState(0);
   const [content, setContent] = useState([]);
   const [lastModified, setLastModified] = useState("");
-  const [emptyCells, setEmptyCells] = useState(0);
-
-  //Modals
-  const [collectionFloodModal, setCollectionFloodModal] = useState(false);
+  const [contentData, setContentData] = useState([]);
 
   //Viewport
   const [collectionViewport, setCollectionViewport] = useState({
@@ -61,6 +60,8 @@ export const Collection = ({
   //Panels
   const [collectionUtilities, setCollectionUtilities] = useState(true);
   const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
+
+  console.log(activeCell)
 
   useEffect(() => {
     setCollection(file.meta);
@@ -75,15 +76,29 @@ export const Collection = ({
     let height = width / 1.5;
     setCellWidth(width);
     setCellHeight(height);
-    //Empty Cells
-    const total = file.meta.body.collectionX * file.meta.body.collectionY;
-    const filled = file.meta.body.content
-      .flat()
-      .filter((item: any) => item.id).length;
-    setEmptyCells(total - filled);
   }, [file]);
 
-  console.log("colelction", collection);
+  useEffect(() => {
+    //Content Data
+    ipcRenderer
+      .invoke("collection-viewport", {
+        req: "GET",
+        dir: dir,
+        content: file.meta.body.content,
+      })
+      .then((res) => {
+        setContentData(res);
+      });
+  }, [content]);
+
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.keyCode === 83) {
+      handleSave();
+    } else if (e.keyCode === 8) {
+      if (activeCell)
+      removeCellAsset(activeCell.cellY, activeCell.cellX)
+    }
+  };
 
   const handleSave = () => {
     const fullPath = path.join(dir, file.file);
@@ -148,12 +163,27 @@ export const Collection = ({
     setActiveCell({ cellY: row, cellX: column, asset: asset });
   };
 
-  const updateContent = (content: any[][]) => {
-    setContent(content);
+  const changeCellAsset = (row, column, fileName) => {
+    const updatedContent = [...content];
+    updatedContent[row][column].path = fileName;
+    setContent(updatedContent);
+    handleChanged(tabIndex);
   };
 
+  const removeCellAsset = (row, column) => {
+    const updatedContent = [...content];
+    updatedContent[row][column] = {};
+    setContent(updatedContent);
+    handleChanged(tabIndex);
+  }
+
   return (
-    <div className="h-full w-full overflow-hidden flex flex-col opacity-90">
+    <div
+      className="h-full w-full overflow-hidden flex flex-col opacity-90"
+      onKeyDown={(e) => {
+        handleKeyDown(e);
+      }}
+      tabIndex={1}>
       <Split
         className="h-full flex"
         direction={"horizontal"}
@@ -215,15 +245,19 @@ export const Collection = ({
             <CollectionViewport
               setCollectionViewport={setCollectionViewport}
               collectionViewport={collectionViewport}
-              content={content}
+              contentData={contentData}
               cellHeight={cellHeight}
               cellWidth={cellWidth}
               handleCellClick={handleCellClick}
+              changeCellAsset={changeCellAsset}
+              dragging={dragging}
+              setDragging={setDragging}
             />
           </div>
         </div>
         {collectionUtilities ? (
           <CollectionUtilities
+          dir={dir}
             collection={collection}
             activeCell={activeCell}
             name={name}

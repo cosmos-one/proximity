@@ -12,6 +12,7 @@ interface FilePanelProps {
   handleOpenNewDirectory: () => void;
   handleNewTab: (file: string) => void;
   refresh: () => void;
+  setDragging: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const FilePanel: React.FC<FilePanelProps> = ({
@@ -21,6 +22,7 @@ export const FilePanel: React.FC<FilePanelProps> = ({
   handleOpenNewDirectory,
   handleNewTab,
   refresh,
+  setDragging
 }) => {
   //Files
   const [fileArchive, setFileArchive] = useState([]);
@@ -59,7 +61,7 @@ export const FilePanel: React.FC<FilePanelProps> = ({
       <div className="overflow-y-auto h-full">
         {dir ? (
           <div>
-            <FileList refresh={refresh} filePaths={fileArchive} dir={dir} handleNewTab={handleNewTab} collectionCreateInput={collectionCreateInput} collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
+            <FileList setDragging={setDragging} refresh={refresh} filePaths={fileArchive} dir={dir} handleNewTab={handleNewTab} collectionCreateInput={collectionCreateInput} collectionCreateInputToggle={() => {setCollectionCreateInput(!collectionCreateInput)}}/>
           </div>
         ) : (
           <div className="w-full justify-center flex">

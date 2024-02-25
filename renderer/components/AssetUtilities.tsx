@@ -114,7 +114,7 @@ export const AssetUtilities = ({
 
         <div className="font-semibold">
           <input
-            className="border border-lightgreen rounded-md w-full p-1"
+            className="w-full p-1"
             type="text"
             value={name}
             onChange={(e) => {
@@ -123,10 +123,11 @@ export const AssetUtilities = ({
             placeholder="Name"
           />
         </div>
+        <HorizontalLine />
         <div className="italic">
           <input
             type="text"
-            className="border border-lightgreen rounded-md w-full p-1"
+            className=" w-full p-1"
             value={source}
             placeholder="Source"
             onChange={(e) => {
@@ -134,15 +135,15 @@ export const AssetUtilities = ({
             }}
           />
         </div>
+        <HorizontalLine />
         <div>
           <textarea
-            className="border border-lightgreen rounded-md w-full p-1 bg-black resize-none min-h-[200px] focus:outline-none"
+            className="w-full p-1 bg-black resize-none min-h-[200px] focus:outline-none"
             value={notes}
             placeholder="Notes"
             onChange={(e) => {
               handleNotes(e);
             }}
-            onBlur={() => {}}
           />
         </div>
         <HorizontalLine />

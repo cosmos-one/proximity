@@ -1,17 +1,21 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import { ImageViewer } from "./ImageViewer";
 
 export const CollectionViewport = ({
   setCollectionViewport,
   collectionViewport,
-  content,
+  contentData,
   cellHeight,
   cellWidth,
   handleCellClick,
+  changeCellAsset,
+  dragging,
+  setDragging,
 }) => {
   let collectionRef = useRef<HTMLTableElement>(null);
   let collectionContainerRef = useRef<HTMLDivElement>(null);
+
   useGesture(
     {
       onDrag: ({ offset: [dx, dy] }) => {
@@ -40,6 +44,7 @@ export const CollectionViewport = ({
       eventOptions: { passive: false },
     }
   );
+
   return (
     <div
       className="flex h-full items-center justify-center overflow-hidden"
@@ -54,10 +59,10 @@ export const CollectionViewport = ({
           touchAction: "none",
         }}>
         <tbody className="border border-green border-collapse">
-          {content.map((item, i) => {
+          {contentData.map((row, i) => {
             return (
               <tr key={i}>
-                {item?.map((asset, index) => {
+                {row?.map((asset, index) => {
                   return (
                     <td
                       key={index}
@@ -67,11 +72,19 @@ export const CollectionViewport = ({
                         width: `${cellWidth}vh`,
                         height: `${cellHeight}vh`,
                       }}
-                      onClick={() => {
+                      onFocus={() => {
                         handleCellClick(i, index, asset);
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                      }}
+                      onDrop={() => {
+                        changeCellAsset(i, index, dragging);
                       }}>
-                      {asset.name ? (
-                        <ImageViewer imageData={asset.heroImage} />
+                      {asset.data ? (
+                        <ImageViewer
+                          imageData={Buffer.from(asset.data.heroImage)}
+                        />
                       ) : null}
                     </td>
                   );

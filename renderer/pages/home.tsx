@@ -14,6 +14,7 @@ import { TabGroup } from "@/components/TabGroup";
 import { Footer } from "@/components/Footer";
 import { WindowBar } from "@/components/WindowBar";
 import { AssetPanel } from "@/components/AssetPanel";
+import { DndContext } from "@dnd-kit/core";
 
 function Home() {
   //Status
@@ -28,6 +29,9 @@ function Home() {
   const [tabs, setTabs] = useState([[]]);
   const [activeTab, setActiveTab] = useState([]);
   const [activeTabGroup, setActiveTabGroup] = useState(0);
+
+  //Dragging
+  const [dragging, setDragging] = useState();
 
   const handleActiveTool = (tool: number) => {
     setActiveTool(tool);
@@ -100,10 +104,12 @@ function Home() {
       if (
         tabs[activeTabGroup].filter((tab) => tab.id === fileName).length > 0
       ) {
-        let newActiveTabIndex = tabs[activeTabGroup].findIndex((tab) => tab.id === fileName)
-        const updateActiveTab = [...activeTab]
-        updateActiveTab[activeTabGroup] = newActiveTabIndex
-        setActiveTab(updateActiveTab)
+        let newActiveTabIndex = tabs[activeTabGroup].findIndex(
+          (tab) => tab.id === fileName
+        );
+        const updateActiveTab = [...activeTab];
+        updateActiveTab[activeTabGroup] = newActiveTabIndex;
+        setActiveTab(updateActiveTab);
       } else {
         const update = [...tabs];
         if (fileName.includes(".md")) {
@@ -199,14 +205,14 @@ function Home() {
     const update = [...tabs];
     update[activeTabGroup][tabIndex] = data;
     setTabs(update);
-  }
+  };
 
   return (
-    <div>
+    <>
       <Head>
         <title>Proximity</title>
       </Head>
-      <main className="h-screen max-h-screen flex flex-col overflow-hidden focus:outline-none">
+      <main className="h-screen max-h-screen max-w-screen w-screen flex flex-col overflow-hidden focus:outline-none">
         <Toaster position="top-center" reverseOrder={false} />
         <WindowBar
           dir={dir}
@@ -214,7 +220,9 @@ function Home() {
             handleRefresh();
           }}
           refreshing={refreshing}
-          handleOpenNewDirectory={() => {handleOpenNewDirectory()}}
+          handleOpenNewDirectory={() => {
+            handleOpenNewDirectory();
+          }}
         />
         <div className="h-full w-full flex overflow-hidden">
           <Toolbar
@@ -226,13 +234,14 @@ function Home() {
           />
           <div className="h-full w-full overflow-hidden">
             <Split
-              className="flex w-full h-full overflow-y-hidden"
+              className="flex w-full h-full overflow-hidden"
               gutterAlign="center"
               sizes={[0.1, 0.7]}
               minSize={100}>
               {panel ? (
-                <div className="h-full overflow-y-hidden opacity-90">
+                <div className="h-full overflow-hidden opacity-90">
                   <FilePanel
+                    setDragging={setDragging}
                     refresh={() => {
                       handleRefresh();
                     }}
@@ -263,7 +272,7 @@ function Home() {
                 </div>
               ) : null}
               <Split
-                className="flex w-full h-full overflow-hidden pr-1"
+                className="flex w-full h-full overflow-hidden"
                 direction="horizontal"
                 gutterSize={10}
                 minSize={100}>
@@ -287,6 +296,8 @@ function Home() {
                       tabGroupIndex={index}
                       refresh={handleRefresh}
                       updateTab={updateTab}
+                      dragging={dragging}
+                      setDragging={setDragging}
                     />
                   );
                 })}
@@ -294,9 +305,10 @@ function Home() {
             </Split>
           </div>
         </div>
-        <Footer refreshing={refreshing}/>
+
+        <Footer refreshing={refreshing} />
       </main>
-    </div>
+    </>
   );
 }
 
