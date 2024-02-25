@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tooltip } from "./Tooltip";
+import { ipcRenderer } from "electron";
 
 export const WindowBar = ({
   dir,
@@ -7,8 +8,14 @@ export const WindowBar = ({
   refreshing,
   handleOpenNewDirectory,
 }) => {
+
+  const handleDoubleClick = (e) => {
+    ipcRenderer
+    .invoke("maximise")
+  }
+
   return (
-    <div className="h-[40px] min-h-[40px] drag flex flex-none items-center justify-between p-2 space-x-3">
+    <div className="h-[40px] min-h-[40px] drag flex flex-none items-center justify-between p-2 space-x-3" onDoubleClick={(e) => {handleDoubleClick(e)}}>
       <div></div>
       <div className="w-1/4">
         <div className="opacity-50 hover:opacity-100 hover:cursor-pointer duration-150 text-xs border border-lightgreen rounded-md p-1 flex items-center space-x-4 justify-center">

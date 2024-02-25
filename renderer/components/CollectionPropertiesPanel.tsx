@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Types from "@/types";
-import Link from "next/link";
 import { Time } from "./Time";
-import toast from "react-hot-toast";
 import { RingLoader } from "react-spinners";
 import { ImageViewer } from "./ImageViewer";
 import { ipcRenderer } from "electron";

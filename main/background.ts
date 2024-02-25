@@ -16,7 +16,7 @@ import {
   createCollection,
   readCollection,
   updateCollection,
-  readCollectionViewport
+  readCollectionViewport,
 } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -44,6 +44,13 @@ if (isProd) {
     // mainWindow.webContents.openDevTools();
   }
 
+  ipcMain.handle("maximise", async (event) => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  });
 })();
 
 app.on("window-all-closed", () => {
@@ -148,9 +155,9 @@ ipcMain.handle("collection-viewport", async (event, message) => {
     return;
   } else if (message.req === "GET") {
     let view = await readCollectionViewport(message.dir, message.content);
-    return view
+    return view;
   }
-})
+});
 
 ipcMain.handle("collection-asset", async (event, message) => {
   if (!message.req) {
@@ -158,9 +165,9 @@ ipcMain.handle("collection-asset", async (event, message) => {
   } else if (message.req === "GET") {
     const fullAssetPath = path.join(message.dir, message.path);
     let view = await readAsset(fullAssetPath);
-    return view
+    return view;
   }
-})
+});
 
 //Markdown
 ipcMain.handle("markdown", async (event, message) => {

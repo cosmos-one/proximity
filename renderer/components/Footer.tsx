@@ -6,12 +6,12 @@ export const Footer = ({ refreshing }) => {
       <div className="flex items-center space-x-2">
         {refreshing ? (
           <>
-            <RingLoader color="#00ff00" size={10} /> <span>Loading</span>
+            <RingLoader color="#00ff00" size={10}/> <span>Loading</span>
           </>
         ) : null}
       </div>
       <div className="space-x-2">
-        <span>Proximity v.0.1.0</span>
+        <span>Proximity v.0.3.0</span>
       </div>
     </div>
   );
