@@ -1,6 +1,6 @@
 import { RingLoader } from "react-spinners";
 
-export const Footer = ({ refreshing }) => {
+export const Footer = ({ refreshing, latestRelease }) => {
   return (
     <div className="p-2 font-light text-xs flex justify-between h-[30px] bottom-0 space-x-2">
       <div className="flex items-center space-x-2">
@@ -11,7 +11,7 @@ export const Footer = ({ refreshing }) => {
         ) : null}
       </div>
       <div className="space-x-2">
-        <span>Proximity v.0.3.0</span>
+        <span>Proximity {latestRelease}</span>
       </div>
     </div>
   );

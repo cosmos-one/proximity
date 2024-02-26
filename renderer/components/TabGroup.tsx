@@ -15,6 +15,8 @@ import { BsCircleFill } from "react-icons/bs";
 import { FileIcon } from "./FileIcon";
 
 export const TabGroup = ({
+  latestRelease,
+  latestReleaseDate,
   dir,
   active,
   tabs,
@@ -270,7 +272,7 @@ export const TabGroup = ({
         </>
       ) : (
         <div className="w-full h-full">
-          <Welcome handleOpenDirectory={handleOpenDirectory} />
+          <Welcome handleOpenDirectory={handleOpenDirectory} latestRelease={latestRelease} latestReleaseDate={latestReleaseDate} />
         </div>
       )}
     </>

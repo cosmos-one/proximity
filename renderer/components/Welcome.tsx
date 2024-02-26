@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import path from "path";
 import { ipcRenderer } from "electron";
 
-export const Welcome = ({ handleOpenDirectory }) => {
+export const Welcome = ({
+  handleOpenDirectory,
+  latestRelease,
+  latestReleaseDate,
+}) => {
   const [recentDirectories, setRecentDirectories] = useState([]);
 
   useEffect(() => {
@@ -44,12 +48,12 @@ export const Welcome = ({ handleOpenDirectory }) => {
         </div>
         <div className="space-y-5 p-5 overflow-y-auto customScroll">
           <div className="font-bold text-xl">Welcome to Proximity (Beta)</div>
-          <div className="italic opacity-50">
-            Release v.0.1.0 (25 Feb, 2024)
-          </div>
           <div>
             Proximity is a tool for archiving, sharing and gathering around
             research and intelligence.
+          </div>
+          <div className="italic opacity-50">
+            Release {latestRelease} ({latestReleaseDate})
           </div>
         </div>
       </div>

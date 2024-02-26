@@ -16,6 +16,10 @@ import { WindowBar } from "@/components/WindowBar";
 import { AssetPanel } from "@/components/AssetPanel";
 
 function Home() {
+  //Version
+  const [latestRelease, setLatestRelease] = useState("v.0.4.0");
+  const [latestReleaseDate, setLatestReleaseDate] = useState("Feb 26, 2024");
+
   //Status
   const [refreshing, setRefreshing] = useState(false);
   // Project
@@ -280,6 +284,8 @@ function Home() {
                 {tabs?.map((group, index) => {
                   return (
                     <TabGroup
+                      latestRelease={latestRelease}
+                      latestReleaseDate={latestReleaseDate}
                       dir={dir}
                       active={index === activeTabGroup ? true : false}
                       key={index}
@@ -307,7 +313,7 @@ function Home() {
           </div>
         </div>
 
-        <Footer refreshing={refreshing} />
+        <Footer refreshing={refreshing} latestRelease={latestRelease} />
       </main>
     </>
   );
