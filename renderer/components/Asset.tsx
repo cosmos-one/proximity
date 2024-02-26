@@ -21,6 +21,7 @@ export const Asset = ({
   tabGroupIndex,
   refresh,
   updateTab,
+  setDragging,
 }) => {
   const [assetUtilities, setAssetUtilities] = useState(true);
   const [asset, setAsset] = useState({});
@@ -34,6 +35,7 @@ export const Asset = ({
     setImageData(Buffer.from(file.heroImage));
     setFileData(Buffer.from(file.fileData));
   }, [file]);
+
 
   const handleSave = (data) => {
     const fullPath = path.join(dir, file.file);
@@ -110,6 +112,8 @@ export const Asset = ({
           </div>
           <HorizontalLine />
           <AssetViewport
+            fullPath={path.join(dir, file.file)}
+            setDragging={setDragging}
             asset={asset}
             fileData={fileData}
             heroImage={imageData}

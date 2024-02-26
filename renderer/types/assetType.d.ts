@@ -3,6 +3,7 @@ import { PermissionType } from "./permissionType";
 
 export interface AssetType {
   id: string;
+  path: string;
   file: string;
   fileData: Buffer;
   heroImage: Buffer;

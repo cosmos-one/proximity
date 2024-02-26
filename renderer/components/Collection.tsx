@@ -16,6 +16,7 @@ import { CollectionUtilities } from "./CollectionUtilities";
 import { toast } from "react-hot-toast";
 //Icons
 import { IoExpandOutline } from "react-icons/io5";
+import { CollectionViewportHints } from "./CollectionViewportHints";
 
 interface ActiveCellType {
   cellY: number;
@@ -49,6 +50,8 @@ export const Collection = ({
   const [content, setContent] = useState([]);
   const [lastModified, setLastModified] = useState("");
   const [contentData, setContentData] = useState([]);
+  const [hint, setHint] = useState(false);
+  const [swapHint, setSwapHint] = useState(false);
 
   //Viewport
   const [collectionViewport, setCollectionViewport] = useState({
@@ -59,9 +62,10 @@ export const Collection = ({
 
   //Panels
   const [collectionUtilities, setCollectionUtilities] = useState(true);
-  const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
 
-  console.log(activeCell)
+  //Cell State
+  const [activeCell, setActiveCell] = useState<ActiveCellType | null>(null);
+  const [swapCell, setSwapCell] = useState<ActiveCellType | null>(null);
 
   useEffect(() => {
     setCollection(file.meta);
@@ -95,8 +99,18 @@ export const Collection = ({
     if (e.ctrlKey && e.keyCode === 83) {
       handleSave();
     } else if (e.keyCode === 8) {
-      if (activeCell)
-      removeCellAsset(activeCell.cellY, activeCell.cellX)
+      if (activeCell) removeCellAsset(activeCell.cellY, activeCell.cellX);
+    }
+  };
+
+  const swapKeyDown = (e, row, column, asset) => {
+    if (e.key === "s") {
+      setHint(false);
+      setSwapHint(true);
+      setSwapCell({ cellY: row, cellX: column, asset: asset });
+    } else if (e.key === "Escape" && swapHint === true) {
+      setSwapHint(false);
+      setSwapCell(null);
     }
   };
 
@@ -161,6 +175,9 @@ export const Collection = ({
     asset: Types.AssetTypeCell
   ) => {
     setActiveCell({ cellY: row, cellX: column, asset: asset });
+    if (swapHint) {
+      swapCellAsset(row, column, asset);
+    }
   };
 
   const changeCellAsset = (row, column, fileName) => {
@@ -170,12 +187,26 @@ export const Collection = ({
     handleChanged(tabIndex);
   };
 
+  const swapCellAsset = (row, column, asset) => {
+    const updatedContent = [...content];
+    updatedContent[swapCell.cellY][swapCell.cellX] = {};
+    if (asset.path) {
+      updatedContent[swapCell.cellY][swapCell.cellX].path = asset.path;
+    }
+    updatedContent[row][column].path = swapCell.asset.path;
+    swapCell.asset.file;
+    setSwapCell(null);
+    setSwapHint(false);
+    setContent(updatedContent);
+    handleChanged(tabIndex);
+  };
+
   const removeCellAsset = (row, column) => {
     const updatedContent = [...content];
     updatedContent[row][column] = {};
     setContent(updatedContent);
     handleChanged(tabIndex);
-  }
+  };
 
   return (
     <div
@@ -243,6 +274,7 @@ export const Collection = ({
           <HorizontalLine />
           <div className="w-full h-full overflow-hidden">
             <CollectionViewport
+              dir={dir}
               setCollectionViewport={setCollectionViewport}
               collectionViewport={collectionViewport}
               contentData={contentData}
@@ -251,13 +283,14 @@ export const Collection = ({
               handleCellClick={handleCellClick}
               changeCellAsset={changeCellAsset}
               dragging={dragging}
-              setDragging={setDragging}
+              setHint={setHint}
+              swapKeyDown={swapKeyDown}
             />
           </div>
         </div>
         {collectionUtilities ? (
           <CollectionUtilities
-          dir={dir}
+            dir={dir}
             collection={collection}
             activeCell={activeCell}
             name={name}
@@ -268,6 +301,7 @@ export const Collection = ({
           />
         ) : null}
       </Split>
+      <CollectionViewportHints hint={hint} swapHint={swapHint} filled={true} />
     </div>
   );
 };

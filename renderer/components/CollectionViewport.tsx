@@ -1,8 +1,10 @@
+import path from "path";
 import React, { useEffect, useRef, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import { ImageViewer } from "./ImageViewer";
 
 export const CollectionViewport = ({
+  dir,
   setCollectionViewport,
   collectionViewport,
   contentData,
@@ -11,7 +13,8 @@ export const CollectionViewport = ({
   handleCellClick,
   changeCellAsset,
   dragging,
-  setDragging,
+  setHint,
+  swapKeyDown,
 }) => {
   let collectionRef = useRef<HTMLTableElement>(null);
   let collectionContainerRef = useRef<HTMLDivElement>(null);
@@ -74,12 +77,19 @@ export const CollectionViewport = ({
                       }}
                       onFocus={() => {
                         handleCellClick(i, index, asset);
+                        setHint(true);
+                      }}
+                      onBlur={() => {
+                        setHint(false);
                       }}
                       onDragOver={(e) => {
                         e.preventDefault();
                       }}
                       onDrop={() => {
                         changeCellAsset(i, index, dragging);
+                      }}
+                      onKeyDown={(e) => {
+                        swapKeyDown(e, i, index, asset);
                       }}>
                       {asset.data ? (
                         <ImageViewer

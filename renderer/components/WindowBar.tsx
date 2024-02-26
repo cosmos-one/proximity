@@ -1,3 +1,4 @@
+import path from "path";
 import React, { useEffect, useState } from "react";
 import { Tooltip } from "./Tooltip";
 import { ipcRenderer } from "electron";
@@ -34,7 +35,7 @@ export const WindowBar = ({
               />
             </svg>
           </div>
-          <div>{dir}</div>
+          <div>{path.basename(dir)}</div>
         </div>
       </div>
       <div className="flex items-center space-x-2">

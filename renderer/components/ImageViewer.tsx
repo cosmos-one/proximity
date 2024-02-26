@@ -12,6 +12,7 @@ export const ImageViewer = ({
   return (
     imageData && (
       <img
+        draggable={false}
         src={`data:image/png;base64,${imageData.toString("base64")}`}
         alt="Image"
         className={`w-full h-full ${
